@@ -1,0 +1,796 @@
+---
+title: "Machine Learning with Python"
+author: "Wooyong Park"
+date: today
+format:
+  html:
+    toc: true
+    toc-location: left
+---
+
+
+## What is Machine Learning?
+
+Machine learning(ML) is the process of computer learning the data to discover the relation of multiple variables and make decisions based on them. These decisions could either be prediction, classification, or clustering. Specifically, prediction and classification are grouped into ***supervised learning***, and clustering is also named ***unsupervised learning***.
+
+|  | Supervised Learning | Unsupervised Learning |
+|:----------|:----------|:----------|
+| Algorithm    | Regression and Classification    | Clustering, Association, and Anomaly Detection    |
+| Characteristics    | - Correct answers are given to the computer<br>- Diverse ways to test/score models| - Answers not given to the computer<br> - Limited ways to test/score models|
+
+
+## Supervised Learning
+
+Supervised learning is classified as prediction or classification, according to whether the "target variable" is continuous or discrete. We aim to predict/classify the target variable's value based on the values of "predictor variables".
+
+### Example Workflow
+
+```{python}
+#| eval: false
+#| error: false
+from sklearn.module import Model   #import the type of algorithm
+
+model = Model() #instantiate the model
+model.fit(X, y)  #X: predictor variables, y: target variable (from training data)
+predictions = model.predict(X_new) #X_new: the new data(from test data)
+```
+
+Note that in the example workflow above, `module`, `Model`, `X`, `y`, `model.predict`, and `X_new` are values to be modified for actual use.
+
+
+## Classification
+Classification is the process of predicting a label for the observation. Labels are discrete variable values that classifies each observation into different group. Specific algorithms include KNN, SVM, decision trees, and logistic regressions. 
+
+### k-Nearest Neighbors(KNN)
+**k-Nearest Neighbors**, more often called as **KNN** predicts the label by looking at the `k` closest labelled data points, and take the majority value of label as the observation's label value.
+
+```{python}
+#| echo: false
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.neighbors import KNeighborsClassifier
+
+# Generate synthetic data
+X, y = make_blobs(n_samples=100, centers=3, random_state=42, cluster_std=1.5)
+
+# Create a KNN classifier
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X, y)
+
+# Create a grid of points to predict
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1),
+                     np.arange(y_min, y_max, 0.1))
+
+# Predict for each point in the grid
+Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+
+# Plot the decision boundary
+plt.figure(figsize=(6, 4))
+plt.contourf(xx, yy, Z, alpha=0.4, cmap=plt.cm.Paired)
+plt.scatter(X[:, 0], X[:, 1], c=y, edgecolor='k', cmap=plt.cm.Paired, s=100)
+plt.title("K-Nearest Neighbors (KNN) Algorithm")
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.grid()
+plt.show()
+
+```
+The natural question following would be "How should I choose the right `k`?" A smaller `k` would mean that individual data gains more power in the classification, which would turn more complex models and overfitting. Likewise, if `k` is too large, it would give too simple models and cause underfitting. Hence, the question also faces the **bias-variance tradeoff** and researchers should be careful not to arrive at both extremes. For a theoretical background for KNN, please go to [A.1.](/#sec-knn_algorithm)
+
+```{python}
+#| echo: false
+
+# Generate synthetic data with increased variance (higher cluster_std)
+X, y = make_blobs(n_samples=100, centers=3, random_state=42, cluster_std=3.0)
+
+# Create subplots for different k-values
+k_values = [1, 5, 15]
+fig, axes = plt.subplots(1, len(k_values), figsize=(15, 5), sharex=True, sharey=True)
+
+# Define the grid for plotting
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1),
+                     np.arange(y_min, y_max, 0.1))
+
+# Loop through k-values and plot
+for k, ax in zip(k_values, axes):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X, y)
+    
+    # Predict for each point in the grid
+    Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    
+    # Plot decision boundary and points
+    ax.contourf(xx, yy, Z, alpha=0.4, cmap=plt.cm.Paired)
+    ax.scatter(X[:, 0], X[:, 1], c=y, edgecolor='k', cmap=plt.cm.Paired, s=100)
+    ax.set_title(f"k = {k}")
+    ax.set_xlabel("Feature 1")
+    ax.set_ylabel("Feature 2")
+    ax.grid()
+
+plt.tight_layout()
+plt.show()
+```
+
+
+Let's begin our first machine learning with the following example workflow. In this workflow, we will use the `titanic` data from the `seaborn` package and predict whether a person survived or not with the predictor variables `pclass`, `sex`, `age`, `sibsp`, `parch`, and `embarked`. First, load the dataset.
+
+```{python}
+import pandas as pd
+import seaborn as sns
+from sklearn.neighbors import KNeighborsClassifier
+df = sns.load_dataset('titanic')
+print(df.head())
+```
+
+#### (1) Getting Ready
+Then, we choose the variables to use in the classification, drop or replace `NA` values, and further process the data to get things ready.
+
+```{python}
+df = df[['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'embarked']]
+
+# Dropping obs with NAs in age
+df = df.dropna(subset = ['age'], axis = 0)
+
+# Replacing obs with NAs in embarked with the mode value
+temp = df['embarked'].value_counts(dropna= True).idxmax()
+print(temp)
+
+temp = df['embarked'].fillna(temp) 
+df['embarked'] = temp
+print(df)
+```
+
+```{python}
+# Creating dummies for sex and embarked (one-hot-encoding)
+
+onehot_sex = pd.get_dummies(df['sex'])
+onehot_embarked = pd.get_dummies(df['embarked'], prefix = 'town')
+df = pd.concat([df, onehot_sex], axis = 1)
+df = pd.concat([df, onehot_embarked], axis = 1)
+
+df = df.drop(['sex', 'embarked'], axis = 1)
+
+X = df[['pclass', 'age', 'sibsp', 'parch', 'female', 'male', 'town_C', 'town_Q', 'town_S']]
+y = df[['survived']]
+
+print(df)
+```
+<br>
+
+#### (2) Normalization and Splitting data
+One of the most important factors in distance-based algorithms(KNN, K-Means, etc.) and gradient-based algorithms(logistic regression, neural networks) is the ***normalization*** of predictor values. This is because input values with larger scales could have a larger effect on calculating the distance between observations. To eliminate such concern, normalization is necessary. In `sci-kit learn`, we do this with the `preprocessing` module.
+
+```{python}
+from sklearn import preprocessing
+print('Before:')
+print(X)
+X = preprocessing.StandardScaler().fit(X).transform(X)
+print('After:')
+print(pd.DataFrame(X))
+```
+In the code above, `preprocessing.StandardScaler()` instantiates a scaling process, and the first method, `fit(X)`, receives `X` and returns the sample mean and the sample variance of each column. Then, the second method, `transform(X)` returns the rescaled (transformed) X values according to the values from `fit(X)`. We replace the original `X` with this new instantiation of the scaler.
+
+<br>
+
+Finally, the last stage of preprocessing data is to split the data into a training set and a test set. Here, we split them in a 7:3 ratio. Also, we often want the `y` values to occur symmetrically for the training and test sets. To do this, we add the optional argument `stratify=y`.
+
+```{python}
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 10, stratify = y)
+
+```
+<br>
+
+#### (3) Training and Testing
+
+```{python}
+#| message: false
+#| warning: false
+
+from sklearn.neighbors import KNeighborsClassifier
+
+# instantiating KNN
+knn = KNeighborsClassifier(n_neighbors = 6)
+
+# training the data
+knn.fit(X_train, y_train)
+
+# predicting(classifying)
+y_predict = knn.predict(X_test)
+
+print(y_predict[0:10])
+print(y_test.values[0:10].flatten())
+```
+<br>
+
+#### (4) Model Performance
+After train/test process is done, we summarize the model performance with confusion matrix and the classification report.
+
+For detailed explanation of measuring model performances in supervised learning, go to @sec-model_performance.
+
+```{python}
+from sklearn import metrics
+
+# confusion matrix
+knn_matrix = metrics.confusion_matrix(y_test, y_predict)
+print('Confusion Matrix:')
+print(knn_matrix)
+
+# accuracy
+knn_score = knn.score(X_test, y_test)
+print('\nAccuracy:')
+print(knn_score)
+
+# classification report
+class_report = metrics.classification_report(y_test, y_predict)
+print('\nClassification Report:')
+print(class_report)
+```
+<br>
+
+To determine the best `k` value, we can loop through different values of `k` and plot the **model complexity curve**. 
+
+In @fig-complexity_curve, we see that after k=15, the model suffers from underfitting. However, below k=5, we can also say that the model suffers from overfitting.
+```{python}
+#| warning: false
+#| label: fig-complexity_curve
+#| fig-cap: "Model Complexity Curve"
+train_accuracies = {}
+test_accuracies = {}
+neighbors = np.arange(1,26)
+
+for k in neighbors:
+  knn = KNeighborsClassifier(n_neighbors = k)
+  knn.fit(X_train, y_train)
+  train_accuracies[k] = knn.score(X_train, y_train)
+  test_accuracies[k] = knn.score(X_test, y_test)
+  
+plt.figure(figsize = (7, 5))
+plt.title('KNN Accuracy Plot')
+plt.plot(neighbors, train_accuracies.values(), label = 'Training Accuracy')
+plt.plot(neighbors, test_accuracies.values(), label = 'Test Accuracy')
+plt.legend()
+plt.xlabel("Number of Neighbors")
+plt.ylabel("Accuracy")
+plt.show()
+```
+
+<br>
+
+### Logistic Regressions
+Logistic regressions are useful for classifying binary labels. We will do this with the same dataset, `titanic`, and classify whether passengers survived or not. The following code repeats the data preprocessing, normalization, and splitting process we had in KNN.
+
+```{python}
+#| message: false
+#| warning: false
+import pandas as pd
+import seaborn as sns
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+
+df = sns.load_dataset('titanic')
+
+df = df[['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'embarked']]
+
+# Dropping obs with NAs in age
+df = df.dropna(subset = ['age'], axis = 0)
+
+# Replacing obs with NAs in embarked with the mode value
+temp = df['embarked'].value_counts(dropna= True).idxmax()
+temp = df['embarked'].fillna(temp) 
+df['embarked'] = temp
+
+onehot_sex = pd.get_dummies(df['sex'])
+onehot_embarked = pd.get_dummies(df['embarked'], prefix = 'town')
+df = pd.concat([df, onehot_sex], axis = 1)
+df = pd.concat([df, onehot_embarked], axis = 1)
+df = df.drop(['sex', 'embarked'], axis = 1)
+
+X = df[['pclass', 'age', 'sibsp', 'parch', 'female', 'male', 'town_C', 'town_Q', 'town_S']]
+y = df[['survived']]
+
+X = preprocessing.StandardScaler().fit(X).transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 10, stratify = y)
+```
+
+#### (1) Training and Testing
+
+Next, we instantiate a `LogisticRegression()` object and train it with the data. The `.predict(X_test)` method returns the predicted class of the test data, and `.predict_proba(X_test)` returns the predicted probability of each class.
+
+- `.predict(X_test)`: predicted class
+- `.predict_proba(X_test)` : predicted probability of each class(the probability threshold is 0.5)
+- `.predict_log_proba(X_test)` : predicted log-probability of each class
+
+
+```{python}
+#| message: false
+#| warning: false
+
+from sklearn.linear_model import LogisticRegression
+
+logreg = LogisticRegression()
+
+logreg.fit(X_train, y_train)
+y_pred = logreg.predict(X_test)
+y_pred_probs = logreg.predict_proba(X_test)[:, 1]
+```
+
+#### (2) ROC- AUC
+By default, probability threshold for logistic regressions in `scikit-learn` is 0.5. However, the right threshold could vary across cases. Thus, to obtain the right threshold, we could plot $1-\mathrm{specificity}$ (on the X-axis) and $\mathrm{sensitivity}$ (on the Y-axis), which is called the **ROC curve(Receiver Operating Characteristics)**.
+
+```{python}
+#| message: false
+#| warning: false
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve
+
+one_m_spec, sens, thresholds = roc_curve(y_test, y_pred_probs)
+
+
+plt.plot([0,1], [0,1], 'k--')
+plt.plot(one_m_spec, sens)
+plt.xlabel("False Positive Rate(1-Spec)")
+plt.ylabel("True Positive Rate(Sens)")
+plt.title("Logistic Regression ROC Curve")
+plt.show()
+
+```
+
+ROC curve illustrates how the model performs on the test data. The more the shape of ROC curve looks like $\Gamma$, the better. - we can find a threshold that attains larger sensitivity and specificity - Area under the curve, **AUC**, is the summarized value of such model performance. Its value range between 0 and 1, with 1 being ideal.
+
+```{python}
+#| message: false
+#| warning: false
+from sklearn.metrics import roc_auc_score
+print(roc_auc_score(y_test, y_pred_probs))
+```
+
+<br>
+
+## Predictions
+Prediction is simply running regressions and using the fitted values as the predicted values of outcome. The process of such practice is not much different from classifications. Let's begin by loading the data.
+
+```{python}
+import seaborn as sns
+import pandas as pd
+
+df = sns.load_dataset('penguins')
+df.head()
+```
+With the `penguins` data from the `seaborn` package, we'd like to predict each penguin's `body_mass_g` based on its `species`, `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, and `sex`. 
+
+```{python}
+df = df.dropna(subset = ['sex', 'body_mass_g'], how = 'any', axis = 0)
+
+onehot_sex = pd.get_dummies(df['sex'])
+onehot_species = pd.get_dummies(df['species'], prefix = 'species')
+df = pd.concat([df, onehot_sex], axis = 1)
+df = pd.concat([df, onehot_species], axis = 1)
+
+df = df.drop(['sex', 'species'], axis = 1)
+
+X = df.drop('body_mass_g', axis = 1).values
+y = df[['body_mass_g']]
+
+print(df)
+```
+
+### Univariate Regression{#sec-univ_reg}
+A univariate regression, or more specifically a simple linear regression, regresses `y` on a single predictor variable `x`. Let's consider a simple case of regressing `body_mass_g` on `flipper_length_mm`.
+
+
+```{python}
+import matplotlib.pyplot as plt
+
+fig = plt.figure(figsize = (9,5))
+ax1 = fig.add_subplot(1,2,1)
+ax2 = fig.add_subplot(1,2,2)
+df.plot(kind='scatter', x='flipper_length_mm', y='body_mass_g', c='coral', ax=ax1)
+sns.regplot(x='flipper_length_mm', y='body_mass_g', data=df, scatter_kws={"alpha": 0.5}, ax=ax2)
+plt.show()
+```
+
+In the code below, we will split the data into training set and test set(7:3), calculate the model performance with R-squared in the test set, and print out the linear coefficients.
+
+```{python}
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+x = df[['flipper_length_mm']]
+y = df[['body_mass_g']]
+
+# split the data
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state = 10)
+
+# instantiate linear regression
+reg = LinearRegression()
+
+# train the data
+reg.fit(x_train, y_train)
+
+# calculate R-squared
+r_square = reg.score(x_test, y_test)
+print('R-squared: ', r_square)
+
+# print the slope and the intercept
+print('slope: ', reg.coef_)
+print('intercept: ', reg.intercept_)
+```
+
+
+### Multinomial Regression with `PolynomialFeatures`
+Following the codes in @sec-univ_reg, we will introduce a quadratic and a cubic term of X to the regression.
+```{python}
+from sklearn.preprocessing import PolynomialFeatures
+
+x = df[['flipper_length_mm']]
+y = df[['body_mass_g']]
+
+
+# split the data
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state = 10)
+
+# adding polynomials
+poly = PolynomialFeatures(degree = 3)
+x_train_poly = poly.fit_transform(x_train)
+x_test_poly = poly.fit_transform(x_test)
+print('x_train shape: ', x_train.shape)
+print('x_train_poly shape: ', x_train_poly.shape)
+
+# instantiate linear regression
+reg = LinearRegression()
+
+# train the data
+reg.fit(x_train_poly, y_train)
+
+# calculate R-squared
+r_square = reg.score(x_test_poly, y_test)
+print('R-squared: ', r_square)
+
+# print the slope and the intercept
+print('slope: ', reg.coef_)
+print('intercept: ', reg.intercept_)
+```
+
+
+<br>
+
+### Multivariate Regressions
+```{python}
+X = df.drop(['body_mass_g', 'island', 'Male', 'species_Gentoo'], axis = 1)
+y = df[['body_mass_g']]
+
+# split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 10)
+
+# instantiate linear regression
+reg = LinearRegression()
+
+# train the data
+reg.fit(X_train, y_train)
+
+# calculate R-squared
+r_square = reg.score(X_test, y_test)
+print('R-squared: ', r_square)
+
+# print the slope and the intercept
+print('covariates: ', list(X_test.columns))
+print('slope: ', reg.coef_)
+print('intercept: ', reg.intercept_)
+```
+<br>
+
+
+### Penalized Regressions
+Penalized regressions, or regularized regressions, are regressions with loss functions modified to reduce the possibility of overfitting. Usually, large coefficients lead to overfitting. Thus, penalized regressions such as ridge regressions and LASSO(Least Absolute Shrinkage and Selection Operator) penalizes large sized coefficients, by including the size of coefficients into the loss function.
+
+- Note that since the size of coefficients could differ across measure units of variables, ***standardization before regression is indispensable!!!***
+- Also, the coefficient for the intercept($\beta_0$) is not included into the penalty term.
+
+<br>
+
+#### (1) Ridge Regressions
+- **Loss Function** = $\mathrm{MSE} + \alpha\times\sum_{i=1}^k\beta_i^2$
+- Here, $\alpha$ is called a *hyperparameter*, a parameter that we choose to optimize the prediction.
+- In the case of $\alpha = 0$, ridge regrerssions would be equivalent to OLS.
+
+```{python}
+from sklearn.linear_model import Ridge
+
+# scores = [] #initiate an empty list to record R-squared
+# for alpha in range(-1, 4): 
+#   ridge = Ridge(alpha = 10**alpha)
+#   ridge.fit(X_train, y_train)
+#   y_pred = ridge.predict(X_test)
+#   scores.append(ridge.score(X_test, y_test))
+# 
+# print(scores)
+```
+#### (2) LASSOs
+- **Loss Function** = $\mathrm{MSE} + \alpha\times\sum_{i=1}^k|\beta_i|$
+- Here, $\alpha$ is called a *hyperparameter*, a parameter that we choose to optimize the prediction.
+- In the case of $\alpha = 0$, LASSO would be equivalent to OLS.
+- LASSO shrinks the coefficients of less important features to zero
+
+```{python}
+# from sklearn.linear_model import Lasso
+# 
+# lasso = Lasso(alpha=0.1)
+# lasso_coef = lasso.fit(X, y).coef_
+
+```
+
+
+## Methods of Measuring Model Performance {#sec-model_performance}
+
+| Objective | Classification | Prediction |
+|:----------|:----------|:----------|
+| Related Indices    | - Accuracy<br> - Sensitivity(TP)<br> - Specificity(TN)    |  - R-squared<br> - MSE |
+| Related Figures/Tables    | Confusion Matrix | |
+
+
+### Confusion Matrix
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th style="text-align: center;" colspan="2">Actual Value</th>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align: center;" >T</td>
+    <td style="text-align: center;" >F</td>
+  </tr>
+  <tr>
+    <td style="text-align: center; padding-right: 30px;" rowspan="2"><b>Predicted Value </b></td>
+    <td></td>
+    <td style="text-align: center;">T</td>
+    <td style="text-align: center;">TP</td>
+    <td style="text-align: center;">FP</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td style="text-align: center;">F</td>
+    <td style="text-align: center;">FN</td>
+    <td style="text-align: center;">TN</td>
+  </tr>
+</table>
+
+<br>
+
+### Accuracy
+$$ \frac{\text{correct predictions}}{\text{total observations}} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} +  \text{FN}}$$
+
+<br>
+
+### Sensitivity and Specificity
+
+$$ \mathrm{Sensitivity(=Recall)} = \frac{\text{TP}}{\text{TP} +\text{FN}}$$
+
+$$ \mathrm{Specificity} = \frac{\text{TN}}{\text{TN} +\text{FP}}$$
+
+<br>
+
+### Precision and Negative Predictive
+$$ \mathrm{Precision} = \frac{\text{TP}}{\text{TP} +\text{FP}}$$
+$$ \mathrm{NPV} = \frac{\text{TN}}{\text{TN} +\text{FN}}$$
+
+<br>
+
+### F1 Score
+$$\mathrm{F1} = 2\cdot\frac{\mathrm{Precision}\cdot\mathrm{Recall}}{\mathrm{Precision} + \mathrm{Recall}}$$
+
+### R-Squared and MSE
+R-squared and mean squared error(MSE) are often reported as parts of linear regressions results. To understand the concept, we must understand the concept of **loss function** in regression.
+
+Loss function represents the amount of information loss incurred by using the predicted values rather than actual target values. The most common loss function is the mean squared error function(a.k.a. quadratic loss function), which is equal to the residual sum of squares divided by the number of observations.
+
+$$ MSE = \frac{1}{n}\sum_{i=1}^n(y_i-\hat{y}_i)^2 $$
+$$ RSS = \sum_{i=1}^n(y_i-\hat{y}_i)^2 $$
+
+`mean_squared_error` function from `sklearn.metrics` calculates the MSE of a given model.
+
+```{python}
+#| eval: false
+#| output: false
+from sklearn.metrics import mean_squared_error
+mean_squared_error(y_test, y_pred)
+```
+
+R-squared($R^2$) quantifies the portion explained by the predictor variables of the variance of the target variable. The value ranges from 0 to 1, and a higher value implies that the predictor variables explain the target well.
+
+$$ R^2 = 1-\frac{RSS}{TSS}$$
+$$ TSS = \sum_{i=1}^n(y_i-\bar{y})^2$$
+
+It is calculated by the `score` method of a regression object.
+```{python}
+#| eval: false
+#| output: false
+from sklearn.linear_model import LinearRegression
+
+r_square = reg.score(X, y)
+```
+
+
+## Cross Validation
+Cross validating means dividing the sample into $k$ folds, and rotate the role of test data. In each of these splits and the corresponding test-fold, we obtain $k$ model performance metrics. Through cross validation, we can check whether these $k$ metrics are similar or having peculiarities, helping us generalize the model performance to unseen data.
+
+
+```{python}
+#| eval: false
+#| output: false
+from sklearn.model_selection import cross_val_score, KFold
+
+kf = KFold(n_splits = 5, shuffle = True, random_state = 42) # "shuffle = True" shuffles the data before splitting the data
+reg = LinearRegression() # instantiation of the model selected
+cv_results = cross_val_score(reg, X, y, cv = kf)
+```
+
+## Hyperparameter Tuning
+
+Most ML methods require the researcher to set parameters that shape the learning process, and these parameters are called hyperparameters. Examples include number of neighbors in KNN, alpha in ridge and LASSO, and probability threshold in logistic regressions. Some hyperparameters display stronger predictive power than others in the test data. However, choosing hyperparameter based on the result from a single test set leads to an overfitting to the test set. *Thus, it is essential to use cross-validation for hyperparameter tuning.*
+
+
+### Grid Search cross-validation
+`GridSearchCV` method from the `sklearn.model_selection` module creates a grid of possible hyperparameter values. In detail, there could be more than one hyperparameters for a prediction model. - You can choose both the number of neighbors and a metric(Euclidean or L1) in the case of KNN. - `GridSearchCV` searches through all the user-suggested values of those user-chosen set of hyperparameters.
+
+```{python}
+#| echo: false
+#| output: false
+
+from sklearn import preprocessing
+import pandas as pd
+import seaborn as sns
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+
+df = sns.load_dataset('titanic')
+df = df[['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'embarked']]
+df = df.dropna(subset = ['age'], axis = 0)
+temp = df['embarked'].value_counts(dropna= True).idxmax()
+temp = df['embarked'].fillna(temp) 
+df['embarked'] = temp
+
+
+onehot_sex = pd.get_dummies(df['sex'])
+onehot_embarked = pd.get_dummies(df['embarked'], prefix = 'town')
+df = pd.concat([df, onehot_sex], axis = 1)
+df = pd.concat([df, onehot_embarked], axis = 1)
+
+df = df.drop(['sex', 'embarked'], axis = 1)
+
+X = df[['pclass', 'age', 'sibsp', 'parch', 'female', 'male', 'town_C', 'town_Q', 'town_S']]
+y = df[['survived']]
+
+X = preprocessing.StandardScaler().fit(X).transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 10, stratify = y)
+```
+
+
+```{python}
+#| echo: true
+from sklearn.model_selection import KFold, GridSearchCV
+
+
+kf = KFold(n_splits = 5, shuffle = True, random_state = 42)
+param_grid = {'n_neighbors': range(2,20,2), 'metric': ["minkowski", "cityblock"]} # Note: Minkowski metric is virtually Euclidean in our case.
+knn = KNeighborsClassifier()
+knn_cv = GridSearchCV(knn, param_grid, cv = kf)
+knn_cv.fit(X_train, y_train)
+
+print(knn_cv.best_params_, knn_cv.best_score_)
+```
+
+### Randomized Search cross-validation
+`GridSearchCV` is indeed a very complete way for searching the best set of parameters, given a user-defined range to search for. However, this often results in unnecessarily many trials. That is, `GridSearchCV` goes through the combination of all the folds and the possible parameters values, and that is way too much sometimes. `RandomizedSearchCV` goes through a random set of parameter values, rather than exhausting all the candidates. `RandomizedSearchCV` requires one more argument than `GridSearchCV`: `n_iter`. `n_iter` is the number of possible hyperparameter sets to be tested. More `n_iter` leads to a finer quality at the cost of runtime.
+
+```{python}
+#| echo: true
+from sklearn.model_selection import KFold, RandomizedSearchCV
+
+
+kf = KFold(n_splits = 5, shuffle = True, random_state = 42)
+param_grid = {'n_neighbors': range(2,20,2), 'metric': ["minkowski", "cityblock"]} 
+knn = KNeighborsClassifier()
+knn_cv = RandomizedSearchCV(knn, param_grid, cv = kf, n_iter=20)
+knn_cv.fit(X_train, y_train)
+
+print(knn_cv.best_params_, knn_cv.best_score_)
+```
+
+## `scikit-learn` Cheatsheets
+
+### Handling Missing Data
+```{python}
+#| eval: false
+#| output: false
+
+from sklearn.impute import SimpleImputer
+
+# imputation with sample mean
+imp_mean = SimpleImputer()
+X_train = imp_mode.transform(X_train)
+
+# imputation with mode
+imp_mode = SimpleImputer(strategy="most_frequent")
+X_train = imp_mode.transform(X_train)
+
+
+```
+## Appendix
+.
+
+### A.1. KNN Algorithm{#sec-knn_algorithm}
+.
+
+
+### A.2. LASSO vs OLS
+LASSO shrinks the number of predictor variables used to explain the target. But after removing the bad predictors, *wouldn't OLS with the remaining features be a better prediction than LASSO estimates?*
+
+<br>
+
+*The answer is* ***no.*** LASSO reduces the variance of the model at the cost of the model's bias, whereas OLS, even with only the remaining features,increases variance and reduces bias. 
+
+```{python}
+#|warning: false
+
+import numpy as np
+from sklearn.linear_model import LassoCV, LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+
+
+# A simulation with higher dimensionality (p > n) and multiple runs
+n_samples, n_features = 50, 200  # Higher dimensionality (p > n)
+n_simulations = 100  # Number of simulations
+mse_lasso_list = []
+mse_ols_list = []
+
+for _ in range(n_simulations):
+    X = np.random.randn(n_samples, n_features)
+    true_coef = np.zeros(n_features)
+    true_coef[:10] = np.random.uniform(5, 10, size=10)  # Sparse true coefficients
+    y = X @ true_coef + np.random.randn(n_samples) * 5
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=None)
+
+    lasso = LassoCV(cv=5).fit(X_train, y_train)
+    selected_features = np.where(lasso.coef_ != 0)[0]
+    
+    ols = LinearRegression()
+    if len(selected_features) > 0:
+        ols.fit(X_train[:, selected_features], y_train)
+        y_pred_ols = ols.predict(X_test[:, selected_features])
+        mse_ols_list.append(mean_squared_error(y_test, y_pred_ols))
+    else:
+        mse_ols_list.append(np.nan)  # Handle case where LASSO selects no features
+    
+    y_pred_lasso = lasso.predict(X_test)
+    mse_lasso_list.append(mean_squared_error(y_test, y_pred_lasso))
+
+mean_mse_lasso = np.nanmean(mse_lasso_list)
+mean_mse_ols = np.nanmean(mse_ols_list)
+
+print('Average MSE of LASSO: ', mean_mse_lasso)
+print('Average MSE of OLS: ', mean_mse_ols)
+
+
+```
+
+## References
+- (KOR) Seunghwan Oh(오승환), 2019, Python Machine Learning Pandas Data Analysis(파이썬 머신러닝 판다스 데이터분석), 정보문화사

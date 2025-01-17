@@ -1,0 +1,7 @@
+body {
+    text-align: justify;
+}
+
+.toc {
+    text-align: left; /* Reset TOC to default left alignment */
+}
