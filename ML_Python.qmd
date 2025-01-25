@@ -532,6 +532,7 @@ from sklearn.linear_model import Ridge
 
 
 ## Methods of Measuring Model Performance {#sec-model_performance}
+Model performance is primarily assessed with the test set. 
 
 | Objective | Classification | Prediction |
 |:----------|:----------|:----------|
@@ -643,6 +644,44 @@ cv_results = cross_val_score(reg, X, y, cv = kf)
 
 Most ML methods require the researcher to set parameters that shape the learning process, and these parameters are called hyperparameters. Examples include number of neighbors in KNN, alpha in ridge and LASSO, and probability threshold in logistic regressions. Some hyperparameters display stronger predictive power than others in the test data. However, choosing hyperparameter based on the result from a single test set leads to an overfitting to the test set. *Thus, it is essential to use cross-validation for hyperparameter tuning.*
 
+### Why cross-validation for hyperparameter tuning?
+We have two kinds of parameters: **(1) model parameters**, and **(2) hyperparameters** that shape the model.
+
+Model parameters are estimated based on the training set, given a specific value of hyperparameters. Thus, we can't obtain model parameter estimates and tune hyperparameters simultaneously in the training set, because the model parameter estimates are somewhat conditional on the hyperparameter value.
+
+For example, in LASSO,
+
+$$
+\hat{\mathbf{\beta}} = \mathrm{arg}\min_\beta MSE(\beta; \xi^{tr})+\alpha\cdot||\beta||
+$${#eq-lasso_beta}
+
+Here $\xi^{tr}$ denotes the training data. $\alpha$ and $\beta$ denote the hyperparameter and the regression coefficients, respectively. Inspecting the definition, one can say $\hat{\beta} = \hat{\beta}(\alpha, \xi^{tr})$.
+
+If $\alpha$ is also determined by the training set, $\hat{\beta}$ reduces into $\hat{\beta}(\alpha(\xi^{tr}), \xi^{tr}) = \hat{\beta}(\xi^{tr})$. (i.e., The parameters are entirely a function of the training set). Note that in the context of LASSO, this results the same coefficients to OLS as $\alpha$ would reduce to 0. 
+
+
+Then, should we select hyperparameters based on test set(i.e., given a set of possible candidates, should we select one that best performs in the test set)? Such hyperparameters would overfit the test set; we want our hyperparameters to work well with unseen and new data. 
+
+In the former example with LASSO,
+
+$$
+\hat{\mathbf{\beta}_\alpha}(\xi^{tr}) = \mathrm{arg}\min_\beta MSE(\beta; \xi^{tr})+\alpha\cdot||\beta||
+$$
+
+is a function of $\xi^{tr}$ and $\alpha$. In contrast to @eq-lasso_beta, I added the subscript $\alpha$, because this is not our final choice of $\hat{\beta}$; rather, it is the interim value of $\hat{\beta}$ given a specific value of $\alpha$. The final choice of $\hat{\beta}$ would be among $\{\hat{\beta_\alpha}: \alpha \in I_\alpha\}$.
+
+Behind $\alpha$ is the set of possible candidates, denoted by $I_\alpha$, and the optimization in the test set, $\xi^{te}$.  Comparing all the 
+$$
+\hat{\alpha} = \mathrm{arg}\min_{\alpha\in I_\alpha} MSE(\hat{\beta_\alpha}(\xi^{tr}); \xi^{te})+\alpha\cdot||\hat{\beta_\alpha}||
+$$
+
+The resulting best $\hat{\alpha}$ is the function of $\xi^{tr}, \xi^{te}$, and the set $I_\alpha$, and our choice of $\hat{\beta}$ would be $\hat{\beta_\hat{\alpha}}$.
+
+This leads to an overfitting to the test set, because the test set determines both $\hat{\alpha}$ and $\hat{\beta}$.
+
+Now, consider k-fold cross validation. All splits assign different folds the role of a test set. Let $S_i(i=1,2,...,k)$ denote the split where the $i$-th fold takes the role of a test set. In $S_i$, let $\xi^i$ and $\xi^{-i}$ denote the test fold and training folds of that split. 
+
+TBU
 
 ### Grid Search cross-validation
 `GridSearchCV` method from the `sklearn.model_selection` module creates a grid of possible hyperparameter values. In detail, there could be more than one hyperparameters for a prediction model. - You can choose both the number of neighbors and a metric(Euclidean or L1) in the case of KNN. - `GridSearchCV` searches through all the user-suggested values of those user-chosen set of hyperparameters.
@@ -650,6 +689,8 @@ Most ML methods require the researcher to set parameters that shape the learning
 ```{python}
 #| echo: false
 #| output: false
+#| message: false
+#| warning: false
 
 from sklearn import preprocessing
 import pandas as pd
@@ -683,6 +724,9 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, rando
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
+
 from sklearn.model_selection import KFold, GridSearchCV
 
 
@@ -700,6 +744,8 @@ print(knn_cv.best_params_, knn_cv.best_score_)
 
 ```{python}
 #| echo: true
+#| message: false
+#| warning: false
 from sklearn.model_selection import KFold, RandomizedSearchCV
 
 
@@ -712,7 +758,12 @@ knn_cv.fit(X_train, y_train)
 print(knn_cv.best_params_, knn_cv.best_score_)
 ```
 
+## Pipeline Operators
+TBU
+
 ## `scikit-learn` Cheatsheets
+TBU
+
 
 ### Handling Missing Data
 ```{python}
@@ -731,11 +782,12 @@ X_train = imp_mode.transform(X_train)
 
 
 ```
+
 ## Appendix
-.
+TBU
 
 ### A.1. KNN Algorithm{#sec-knn_algorithm}
-.
+TBU
 
 
 ### A.2. LASSO vs OLS

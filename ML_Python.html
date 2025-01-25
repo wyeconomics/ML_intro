@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Wooyong Park">
-<meta name="dcterms.date" content="2025-01-15">
+<meta name="dcterms.date" content="2025-01-25">
 
 <title>Machine Learning with Python</title>
 <style>
@@ -142,9 +142,11 @@ window.Quarto = {
   <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">Cross Validation</a></li>
   <li><a href="#hyperparameter-tuning" id="toc-hyperparameter-tuning" class="nav-link" data-scroll-target="#hyperparameter-tuning">Hyperparameter Tuning</a>
   <ul class="collapse">
+  <li><a href="#why-cross-validation-for-hyperparameter-tuning" id="toc-why-cross-validation-for-hyperparameter-tuning" class="nav-link" data-scroll-target="#why-cross-validation-for-hyperparameter-tuning">Why cross-validation for hyperparameter tuning?</a></li>
   <li><a href="#grid-search-cross-validation" id="toc-grid-search-cross-validation" class="nav-link" data-scroll-target="#grid-search-cross-validation">Grid Search cross-validation</a></li>
   <li><a href="#randomized-search-cross-validation" id="toc-randomized-search-cross-validation" class="nav-link" data-scroll-target="#randomized-search-cross-validation">Randomized Search cross-validation</a></li>
   </ul></li>
+  <li><a href="#pipeline-operators" id="toc-pipeline-operators" class="nav-link" data-scroll-target="#pipeline-operators">Pipeline Operators</a></li>
   <li><a href="#scikit-learn-cheatsheets" id="toc-scikit-learn-cheatsheets" class="nav-link" data-scroll-target="#scikit-learn-cheatsheets"><code>scikit-learn</code> Cheatsheets</a>
   <ul class="collapse">
   <li><a href="#handling-missing-data" id="toc-handling-missing-data" class="nav-link" data-scroll-target="#handling-missing-data">Handling Missing Data</a></li>
@@ -181,7 +183,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 15, 2025</p>
+      <p class="date">January 25, 2025</p>
     </div>
   </div>
   
@@ -228,7 +230,7 @@ window.Quarto = {
 <p>Supervised learning is classified as prediction or classification, according to whether the “target variable” is continuous or discrete. We aim to predict/classify the target variable’s value based on the values of “predictor variables”.</p>
 <section id="example-workflow" class="level3">
 <h3 class="anchored" data-anchor-id="example-workflow">Example Workflow</h3>
-<div id="44b750de" class="cell" data-execution_count="1">
+<div id="a05989c7" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.module <span class="im">import</span> Model   <span class="co">#import the type of algorithm</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Model() <span class="co">#instantiate the model</span></span>
@@ -244,7 +246,7 @@ window.Quarto = {
 <section id="k-nearest-neighborsknn" class="level3">
 <h3 class="anchored" data-anchor-id="k-nearest-neighborsknn">k-Nearest Neighbors(KNN)</h3>
 <p><strong>k-Nearest Neighbors</strong>, more often called as <strong>KNN</strong> predicts the label by looking at the <code>k</code> closest labelled data points, and take the majority value of label as the observation’s label value.</p>
-<div id="011a49bc" class="cell" data-execution_count="2">
+<div id="bc1e0db8" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -254,17 +256,17 @@ window.Quarto = {
 </div>
 </div>
 <p>The natural question following would be “How should I choose the right <code>k</code>?” A smaller <code>k</code> would mean that individual data gains more power in the classification, which would turn more complex models and overfitting. Likewise, if <code>k</code> is too large, it would give too simple models and cause underfitting. Hence, the question also faces the <strong>bias-variance tradeoff</strong> and researchers should be careful not to arrive at both extremes. For a theoretical background for KNN, please go to <a href="./#sec-knn_algorithm">A.1.</a></p>
-<div id="92558497" class="cell" data-execution_count="3">
+<div id="5e4ca1b5" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ML_Python_files/figure-html/cell-4-output-1.png" width="1430" height="470" class="figure-img"></p>
+<p><img src="ML_Python_files/figure-html/cell-4-output-1.png" width="1429" height="468" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Let’s begin our first machine learning with the following example workflow. In this workflow, we will use the <code>titanic</code> data from the <code>seaborn</code> package and predict whether a person survived or not with the predictor variables <code>pclass</code>, <code>sex</code>, <code>age</code>, <code>sibsp</code>, <code>parch</code>, and <code>embarked</code>. First, load the dataset.</p>
-<div id="dded106d" class="cell" data-execution_count="4">
+<div id="73bbce22" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
@@ -289,7 +291,7 @@ window.Quarto = {
 <section id="getting-ready" class="level4">
 <h4 class="anchored" data-anchor-id="getting-ready">(1) Getting Ready</h4>
 <p>Then, we choose the variables to use in the classification, drop or replace <code>NA</code> values, and further process the data to get things ready.</p>
-<div id="a7e6bf59" class="cell" data-execution_count="5">
+<div id="8754526d" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[[<span class="st">'survived'</span>, <span class="st">'pclass'</span>, <span class="st">'sex'</span>, <span class="st">'age'</span>, <span class="st">'sibsp'</span>, <span class="st">'parch'</span>, <span class="st">'embarked'</span>]]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropping obs with NAs in age</span></span>
@@ -320,7 +322,7 @@ window.Quarto = {
 [714 rows x 7 columns]</code></pre>
 </div>
 </div>
-<div id="8b4edc34" class="cell" data-execution_count="6">
+<div id="4525ff8d" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating dummies for sex and embarked (one-hot-encoding)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
@@ -369,7 +371,7 @@ window.Quarto = {
 <section id="normalization-and-splitting-data" class="level4">
 <h4 class="anchored" data-anchor-id="normalization-and-splitting-data">(2) Normalization and Splitting data</h4>
 <p>One of the most important factors in distance-based algorithms(KNN, K-Means, etc.) and gradient-based algorithms(logistic regression, neural networks) is the <strong><em>normalization</em></strong> of predictor values. This is because input values with larger scales could have a larger effect on calculating the distance between observations. To eliminate such concern, normalization is necessary. In <code>sci-kit learn</code>, we do this with the <code>preprocessing</code> module.</p>
-<div id="152a7ae5" class="cell" data-execution_count="7">
+<div id="6416b44e" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Before:'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span>
@@ -425,7 +427,7 @@ After:
 <p>In the code above, <code>preprocessing.StandardScaler()</code> instantiates a scaling process, and the first method, <code>fit(X)</code>, receives <code>X</code> and returns the sample mean and the sample variance of each column. Then, the second method, <code>transform(X)</code> returns the rescaled (transformed) X values according to the values from <code>fit(X)</code>. We replace the original <code>X</code> with this new instantiation of the scaler.</p>
 <p><br></p>
 <p>Finally, the last stage of preprocessing data is to split the data into a training set and a test set. Here, we split them in a 7:3 ratio. Also, we often want the <code>y</code> values to occur symmetrically for the training and test sets. To do this, we add the optional argument <code>stratify=y</code>.</p>
-<div id="44fa2dea" class="cell" data-execution_count="8">
+<div id="3d3ab515" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>, stratify <span class="op">=</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -434,7 +436,7 @@ After:
 </section>
 <section id="training-and-testing" class="level4">
 <h4 class="anchored" data-anchor-id="training-and-testing">(3) Training and Testing</h4>
-<div id="93573554" class="cell" data-message="false" data-execution_count="9">
+<div id="1562cec0" class="cell" data-message="false" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiating KNN</span></span>
@@ -459,7 +461,7 @@ After:
 <h4 class="anchored" data-anchor-id="model-performance">(4) Model Performance</h4>
 <p>After train/test process is done, we summarize the model performance with confusion matrix and the classification report.</p>
 <p>For detailed explanation of measuring model performances in supervised learning, go to <a href="#sec-model_performance" class="quarto-xref">Section&nbsp;5</a>.</p>
-<div id="fe6e412d" class="cell" data-execution_count="10">
+<div id="5825faa8" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> metrics</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># confusion matrix</span></span>
@@ -537,7 +539,7 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="logistic-regressions" class="level3">
 <h3 class="anchored" data-anchor-id="logistic-regressions">Logistic Regressions</h3>
 <p>Logistic regressions are useful for classifying binary labels. We will do this with the same dataset, <code>titanic</code>, and classify whether passengers survived or not. The following code repeats the data preprocessing, normalization, and splitting process we had in KNN.</p>
-<div id="b20b2bbb" class="cell" data-message="false" data-execution_count="12">
+<div id="dc667085" class="cell" data-message="false" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
@@ -576,7 +578,7 @@ Figure&nbsp;1: Model Complexity Curve
 <li><code>.predict_proba(X_test)</code> : predicted probability of each class(the probability threshold is 0.5)</li>
 <li><code>.predict_log_proba(X_test)</code> : predicted log-probability of each class</li>
 </ul>
-<div id="3dd71cb1" class="cell" data-message="false" data-execution_count="13">
+<div id="00ba41ea" class="cell" data-message="false" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression()</span>
@@ -589,7 +591,7 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="roc--auc" class="level4">
 <h4 class="anchored" data-anchor-id="roc--auc">(2) ROC- AUC</h4>
 <p>By default, probability threshold for logistic regressions in <code>scikit-learn</code> is 0.5. However, the right threshold could vary across cases. Thus, to obtain the right threshold, we could plot <span class="math inline">\(1-\mathrm{specificity}\)</span> (on the X-axis) and <span class="math inline">\(\mathrm{sensitivity}\)</span> (on the Y-axis), which is called the <strong>ROC curve(Receiver Operating Characteristics)</strong>.</p>
-<div id="088dc92c" class="cell" data-message="false" data-execution_count="14">
+<div id="3ec03168" class="cell" data-message="false" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -611,7 +613,7 @@ Figure&nbsp;1: Model Complexity Curve
 </div>
 </div>
 <p>ROC curve illustrates how the model performs on the test data. The more the shape of ROC curve looks like <span class="math inline">\(\Gamma\)</span>, the better. - we can find a threshold that attains larger sensitivity and specificity - Area under the curve, <strong>AUC</strong>, is the summarized value of such model performance. Its value range between 0 and 1, with 1 being ideal.</p>
-<div id="185916a4" class="cell" data-message="false" data-execution_count="15">
+<div id="0e1c697c" class="cell" data-message="false" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roc_auc_score(y_test, y_pred_probs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -625,13 +627,13 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="predictions" class="level2">
 <h2 class="anchored" data-anchor-id="predictions">Predictions</h2>
 <p>Prediction is simply running regressions and using the fitted values as the predicted values of outcome. The process of such practice is not much different from classifications. Let’s begin by loading the data.</p>
-<div id="fd376829" class="cell" data-execution_count="16">
+<div id="8168cf9c" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">'penguins'</span>)</span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="119">
 <div>
 
 
@@ -706,7 +708,7 @@ Figure&nbsp;1: Model Complexity Curve
 </div>
 </div>
 <p>With the <code>penguins</code> data from the <code>seaborn</code> package, we’d like to predict each penguin’s <code>body_mass_g</code> based on its <code>species</code>, <code>bill_length_mm</code>, <code>bill_depth_mm</code>, <code>flipper_length_mm</code>, and <code>sex</code>.</p>
-<div id="1315e48a" class="cell" data-execution_count="17">
+<div id="a34618ec" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna(subset <span class="op">=</span> [<span class="st">'sex'</span>, <span class="st">'body_mass_g'</span>], how <span class="op">=</span> <span class="st">'any'</span>, axis <span class="op">=</span> <span class="dv">0</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
@@ -753,7 +755,7 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="sec-univ_reg" class="level3">
 <h3 class="anchored" data-anchor-id="sec-univ_reg">Univariate Regression</h3>
 <p>A univariate regression, or more specifically a simple linear regression, regresses <code>y</code> on a single predictor variable <code>x</code>. Let’s consider a simple case of regressing <code>body_mass_g</code> on <code>flipper_length_mm</code>.</p>
-<div id="ff94ddf0" class="cell" data-execution_count="18">
+<div id="d1c0830a" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize <span class="op">=</span> (<span class="dv">9</span>,<span class="dv">5</span>))</span>
@@ -771,7 +773,7 @@ Figure&nbsp;1: Model Complexity Curve
 </div>
 </div>
 <p>In the code below, we will split the data into training set and test set(7:3), calculate the model performance with R-squared in the test set, and print out the linear coefficients.</p>
-<div id="8e9e9de4" class="cell" data-execution_count="19">
+<div id="64df8185" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -804,7 +806,7 @@ intercept:  [-5947.85540739]</code></pre>
 <section id="multinomial-regression-with-polynomialfeatures" class="level3">
 <h3 class="anchored" data-anchor-id="multinomial-regression-with-polynomialfeatures">Multinomial Regression with <code>PolynomialFeatures</code></h3>
 <p>Following the codes in <a href="#sec-univ_reg" class="quarto-xref">Section&nbsp;4.1</a>, we will introduce a quadratic and a cubic term of X to the regression.</p>
-<div id="f1b71808" class="cell" data-execution_count="20">
+<div id="cf8f90d2" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df[[<span class="st">'flipper_length_mm'</span>]]</span>
@@ -837,16 +839,16 @@ intercept:  [-5947.85540739]</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>x_train shape:  (233, 1)
 x_train_poly shape:  (233, 4)
-R-squared:  0.7277186999250391
+R-squared:  0.7277186999281051
 slope:  [[ 0.00000000e+00 -2.19281026e+03  1.06376941e+01 -1.67427890e-02]]
-intercept:  [151056.40371964]</code></pre>
+intercept:  [151056.40372225]</code></pre>
 </div>
 </div>
 <p><br></p>
 </section>
 <section id="multivariate-regressions" class="level3">
 <h3 class="anchored" data-anchor-id="multivariate-regressions">Multivariate Regressions</h3>
-<div id="6d08ac1e" class="cell" data-execution_count="21">
+<div id="c92c03b2" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop([<span class="st">'body_mass_g'</span>, <span class="st">'island'</span>, <span class="st">'Male'</span>, <span class="st">'species_Gentoo'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -868,7 +870,7 @@ intercept:  [151056.40371964]</code></pre>
 <span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'slope: '</span>, reg.coef_)</span>
 <span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept: '</span>, reg.intercept_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R-squared:  0.8480141789076937
+<pre><code>R-squared:  0.8480141789076939
 covariates:  ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'Female', 'species_Adelie', 'species_Chinstrap']
 slope:  [[   12.26524581    77.29979709    18.82252667  -366.33908719
   -1022.18520551 -1190.49839881]]
@@ -892,7 +894,7 @@ intercept:  [-574.49999499]</code></pre>
 <li>Here, <span class="math inline">\(\alpha\)</span> is called a <em>hyperparameter</em>, a parameter that we choose to optimize the prediction.</li>
 <li>In the case of <span class="math inline">\(\alpha = 0\)</span>, ridge regrerssions would be equivalent to OLS.</li>
 </ul>
-<div id="24b5d45a" class="cell" data-execution_count="22">
+<div id="574a1a67" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Ridge</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># scores = [] #initiate an empty list to record R-squared</span></span>
@@ -913,7 +915,7 @@ intercept:  [-574.49999499]</code></pre>
 <li>In the case of <span class="math inline">\(\alpha = 0\)</span>, LASSO would be equivalent to OLS.</li>
 <li>LASSO shrinks the coefficients of less important features to zero</li>
 </ul>
-<div id="0b464126" class="cell" data-execution_count="23">
+<div id="54230e53" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.linear_model import Lasso</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># lasso = Lasso(alpha=0.1)</span></span>
@@ -924,6 +926,7 @@ intercept:  [-574.49999499]</code></pre>
 </section>
 <section id="sec-model_performance" class="level2">
 <h2 class="anchored" data-anchor-id="sec-model_performance">Methods of Measuring Model Performance</h2>
+<p>Model performance is primarily assessed with the test set.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -1036,14 +1039,14 @@ TN
 <p>Loss function represents the amount of information loss incurred by using the predicted values rather than actual target values. The most common loss function is the mean squared error function(a.k.a. quadratic loss function), which is equal to the residual sum of squares divided by the number of observations.</p>
 <p><span class="math display">\[ MSE = \frac{1}{n}\sum_{i=1}^n(y_i-\hat{y}_i)^2 \]</span> <span class="math display">\[ RSS = \sum_{i=1}^n(y_i-\hat{y}_i)^2 \]</span></p>
 <p><code>mean_squared_error</code> function from <code>sklearn.metrics</code> calculates the MSE of a given model.</p>
-<div id="1c01707e" class="cell" data-execution_count="24">
+<div id="6112bc18" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>mean_squared_error(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>R-squared(<span class="math inline">\(R^2\)</span>) quantifies the portion explained by the predictor variables of the variance of the target variable. The value ranges from 0 to 1, and a higher value implies that the predictor variables explain the target well.</p>
 <p><span class="math display">\[ R^2 = 1-\frac{RSS}{TSS}\]</span> <span class="math display">\[ TSS = \sum_{i=1}^n(y_i-\bar{y})^2\]</span></p>
 <p>It is calculated by the <code>score</code> method of a regression object.</p>
-<div id="23ad8bad" class="cell" data-execution_count="25">
+<div id="64e42e0e" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1053,7 +1056,7 @@ TN
 <section id="cross-validation" class="level2">
 <h2 class="anchored" data-anchor-id="cross-validation">Cross Validation</h2>
 <p>Cross validating means dividing the sample into <span class="math inline">\(k\)</span> folds, and rotate the role of test data. In each of these splits and the corresponding test-fold, we obtain <span class="math inline">\(k\)</span> model performance metrics. Through cross validation, we can check whether these <span class="math inline">\(k\)</span> metrics are similar or having peculiarities, helping us generalize the model performance to unseen data.</p>
-<div id="6b0e66cc" class="cell" data-execution_count="26">
+<div id="be8ef234" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score, KFold</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>) <span class="co"># "shuffle = True" shuffles the data before splitting the data</span></span>
@@ -1064,10 +1067,34 @@ TN
 <section id="hyperparameter-tuning" class="level2">
 <h2 class="anchored" data-anchor-id="hyperparameter-tuning">Hyperparameter Tuning</h2>
 <p>Most ML methods require the researcher to set parameters that shape the learning process, and these parameters are called hyperparameters. Examples include number of neighbors in KNN, alpha in ridge and LASSO, and probability threshold in logistic regressions. Some hyperparameters display stronger predictive power than others in the test data. However, choosing hyperparameter based on the result from a single test set leads to an overfitting to the test set. <em>Thus, it is essential to use cross-validation for hyperparameter tuning.</em></p>
+<section id="why-cross-validation-for-hyperparameter-tuning" class="level3">
+<h3 class="anchored" data-anchor-id="why-cross-validation-for-hyperparameter-tuning">Why cross-validation for hyperparameter tuning?</h3>
+<p>We have two kinds of parameters: <strong>(1) model parameters</strong>, and <strong>(2) hyperparameters</strong> that shape the model.</p>
+<p>Model parameters are estimated based on the training set, given a specific value of hyperparameters. Thus, we can’t obtain model parameter estimates and tune hyperparameters simultaneously in the training set, because the model parameter estimates are somewhat conditional on the hyperparameter value.</p>
+<p>For example, in LASSO,</p>
+<p><span id="eq-lasso_beta"><span class="math display">\[
+\hat{\mathbf{\beta}} = \mathrm{arg}\min_\beta MSE(\beta; \xi^{tr})+\alpha\cdot||\beta||
+\tag{1}\]</span></span></p>
+<p>Here <span class="math inline">\(\xi^{tr}\)</span> denotes the training data. <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> denote the hyperparameter and the regression coefficients, respectively. Inspecting the definition, one can say <span class="math inline">\(\hat{\beta} = \hat{\beta}(\alpha, \xi^{tr})\)</span>.</p>
+<p>If <span class="math inline">\(\alpha\)</span> is also determined by the training set, <span class="math inline">\(\hat{\beta}\)</span> reduces into <span class="math inline">\(\hat{\beta}(\alpha(\xi^{tr}), \xi^{tr}) = \hat{\beta}(\xi^{tr})\)</span>. (i.e., The parameters are entirely a function of the training set). Note that in the context of LASSO, this results the same coefficients to OLS as <span class="math inline">\(\alpha\)</span> would reduce to 0.</p>
+<p>Then, should we select hyperparameters based on test set(i.e., given a set of possible candidates, should we select one that best performs in the test set)? Such hyperparameters would overfit the test set; we want our hyperparameters to work well with unseen and new data.</p>
+<p>In the former example with LASSO,</p>
+<p><span class="math display">\[
+\hat{\mathbf{\beta}_\alpha}(\xi^{tr}) = \mathrm{arg}\min_\beta MSE(\beta; \xi^{tr})+\alpha\cdot||\beta||
+\]</span></p>
+<p>is a function of <span class="math inline">\(\xi^{tr}\)</span> and <span class="math inline">\(\alpha\)</span>. In contrast to <a href="#eq-lasso_beta" class="quarto-xref">Equation&nbsp;1</a>, I added the subscript <span class="math inline">\(\alpha\)</span>, because this is not our final choice of <span class="math inline">\(\hat{\beta}\)</span>; rather, it is the interim value of <span class="math inline">\(\hat{\beta}\)</span> given a specific value of <span class="math inline">\(\alpha\)</span>. The final choice of <span class="math inline">\(\hat{\beta}\)</span> would be among <span class="math inline">\(\{\hat{\beta_\alpha}: \alpha \in I_\alpha\}\)</span>.</p>
+<p>Behind <span class="math inline">\(\alpha\)</span> is the set of possible candidates, denoted by <span class="math inline">\(I_\alpha\)</span>, and the optimization in the test set, <span class="math inline">\(\xi^{te}\)</span>. Comparing all the <span class="math display">\[
+\hat{\alpha} = \mathrm{arg}\min_{\alpha\in I_\alpha} MSE(\hat{\beta_\alpha}(\xi^{tr}); \xi^{te})+\alpha\cdot||\hat{\beta_\alpha}||
+\]</span></p>
+<p>The resulting best <span class="math inline">\(\hat{\alpha}\)</span> is the function of <span class="math inline">\(\xi^{tr}, \xi^{te}\)</span>, and the set <span class="math inline">\(I_\alpha\)</span>, and our choice of <span class="math inline">\(\hat{\beta}\)</span> would be <span class="math inline">\(\hat{\beta_\hat{\alpha}}\)</span>.</p>
+<p>This leads to an overfitting to the test set, because the test set determines both <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span>.</p>
+<p>Now, consider k-fold cross validation. All splits assign different folds the role of a test set. Let <span class="math inline">\(S_i(i=1,2,...,k)\)</span> denote the split where the <span class="math inline">\(i\)</span>-th fold takes the role of a test set. In <span class="math inline">\(S_i\)</span>, let <span class="math inline">\(\xi^i\)</span> and <span class="math inline">\(\xi^{-i}\)</span> denote the test fold and training folds of that split.</p>
+<p>TBU</p>
+</section>
 <section id="grid-search-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="grid-search-cross-validation">Grid Search cross-validation</h3>
 <p><code>GridSearchCV</code> method from the <code>sklearn.model_selection</code> module creates a grid of possible hyperparameter values. In detail, there could be more than one hyperparameters for a prediction model. - You can choose both the number of neighbors and a metric(Euclidean or L1) in the case of KNN. - <code>GridSearchCV</code> searches through all the user-suggested values of those user-chosen set of hyperparameters.</p>
-<div id="fc3ff29f" class="cell" data-execution_count="28">
+<div id="5eec5462" class="cell" data-message="false" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, GridSearchCV</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1078,478 +1105,109 @@ TN
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>knn_cv.fit(X_train, y_train)</span>
 <span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(knn_cv.best_params_, knn_cv.best_score_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'metric': 'minkowski', 'n_neighbors': 4} 0.7916363636363637</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)</code></pre>
 </div>
 </div>
 </section>
 <section id="randomized-search-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="randomized-search-cross-validation">Randomized Search cross-validation</h3>
 <p><code>GridSearchCV</code> is indeed a very complete way for searching the best set of parameters, given a user-defined range to search for. However, this often results in unnecessarily many trials. That is, <code>GridSearchCV</code> goes through the combination of all the folds and the possible parameters values, and that is way too much sometimes. <code>RandomizedSearchCV</code> goes through a random set of parameter values, rather than exhausting all the candidates. <code>RandomizedSearchCV</code> requires one more argument than <code>GridSearchCV</code>: <code>n_iter</code>. <code>n_iter</code> is the number of possible hyperparameter sets to be tested. More <code>n_iter</code> leads to a finer quality at the cost of runtime.</p>
-<div id="c8942ab3" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, RandomizedSearchCV</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {<span class="st">'n_neighbors'</span>: <span class="bu">range</span>(<span class="dv">2</span>,<span class="dv">20</span>,<span class="dv">2</span>), <span class="st">'metric'</span>: [<span class="st">"minkowski"</span>, <span class="st">"cityblock"</span>]} </span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>knn_cv <span class="op">=</span> RandomizedSearchCV(knn, param_grid, cv <span class="op">=</span> kf, n_iter<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>knn_cv.fit(X_train, y_train)</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(knn_cv.best_params_, knn_cv.best_score_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/model_selection/_search.py:317: UserWarning: The total space of parameters 18 is smaller than n_iter=20. Running 18 iterations. For exhaustive searches, use GridSearchCV.
-  warnings.warn(
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)</code></pre>
-</div>
+<div id="5b0e733f" class="cell" data-message="false" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, RandomizedSearchCV</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {<span class="st">'n_neighbors'</span>: <span class="bu">range</span>(<span class="dv">2</span>,<span class="dv">20</span>,<span class="dv">2</span>), <span class="st">'metric'</span>: [<span class="st">"minkowski"</span>, <span class="st">"cityblock"</span>]} </span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>knn_cv <span class="op">=</span> RandomizedSearchCV(knn, param_grid, cv <span class="op">=</span> kf, n_iter<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>knn_cv.fit(X_train, y_train)</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(knn_cv.best_params_, knn_cv.best_score_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'n_neighbors': 4, 'metric': 'minkowski'} 0.7916363636363637</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)
-/Users/tommy/.virtualenvs/r-reticulate/lib/python3.12/site-packages/sklearn/neighbors/_classification.py:239: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples,), for example using ravel().
-  return self._fit(X, y)</code></pre>
-</div>
 </div>
 </section>
+</section>
+<section id="pipeline-operators" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-operators">Pipeline Operators</h2>
+<p>TBU</p>
 </section>
 <section id="scikit-learn-cheatsheets" class="level2">
 <h2 class="anchored" data-anchor-id="scikit-learn-cheatsheets"><code>scikit-learn</code> Cheatsheets</h2>
+<p>TBU</p>
 <section id="handling-missing-data" class="level3">
 <h3 class="anchored" data-anchor-id="handling-missing-data">Handling Missing Data</h3>
-<div id="7325aecc" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with sample mean</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>imp_mean <span class="op">=</span> SimpleImputer()</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> imp_mode.transform(X_train)</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with mode</span></span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>imp_mode <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">"most_frequent"</span>)</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> imp_mode.transform(X_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4f15bf7d" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with sample mean</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>imp_mean <span class="op">=</span> SimpleImputer()</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> imp_mode.transform(X_train)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with mode</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>imp_mode <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">"most_frequent"</span>)</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> imp_mode.transform(X_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="appendix" class="level2">
 <h2 class="anchored" data-anchor-id="appendix">Appendix</h2>
-<p>.</p>
+<p>TBU</p>
 <section id="sec-knn_algorithm" class="level3">
 <h3 class="anchored" data-anchor-id="sec-knn_algorithm">A.1. KNN Algorithm</h3>
-<p>.</p>
+<p>TBU</p>
 </section>
 <section id="a.2.-lasso-vs-ols" class="level3">
 <h3 class="anchored" data-anchor-id="a.2.-lasso-vs-ols">A.2. LASSO vs OLS</h3>
 <p>LASSO shrinks the number of predictor variables used to explain the target. But after removing the bad predictors, <em>wouldn’t OLS with the remaining features be a better prediction than LASSO estimates?</em></p>
 <p><br></p>
 <p><em>The answer is</em> <strong><em>no.</em></strong> LASSO reduces the variance of the model at the cost of the model’s bias, whereas OLS, even with only the remaining features,increases variance and reduces bias.</p>
-<div id="3123cd09" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LassoCV, LinearRegression</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co"># A simulation with higher dimensionality (p &gt; n) and multiple runs</span></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>n_samples, n_features <span class="op">=</span> <span class="dv">50</span>, <span class="dv">200</span>  <span class="co"># Higher dimensionality (p &gt; n)</span></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>n_simulations <span class="op">=</span> <span class="dv">100</span>  <span class="co"># Number of simulations</span></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>mse_lasso_list <span class="op">=</span> []</span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>mse_ols_list <span class="op">=</span> []</span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_simulations):</span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.random.randn(n_samples, n_features)</span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>    true_coef <span class="op">=</span> np.zeros(n_features)</span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>    true_coef[:<span class="dv">10</span>] <span class="op">=</span> np.random.uniform(<span class="dv">5</span>, <span class="dv">10</span>, size<span class="op">=</span><span class="dv">10</span>)  <span class="co"># Sparse true coefficients</span></span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> X <span class="op">@</span> true_coef <span class="op">+</span> np.random.randn(n_samples) <span class="op">*</span> <span class="dv">5</span></span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>    lasso <span class="op">=</span> LassoCV(cv<span class="op">=</span><span class="dv">5</span>).fit(X_train, y_train)</span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>    selected_features <span class="op">=</span> np.where(lasso.coef_ <span class="op">!=</span> <span class="dv">0</span>)[<span class="dv">0</span>]</span>
-<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>    ols <span class="op">=</span> LinearRegression()</span>
-<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(selected_features) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>        ols.fit(X_train[:, selected_features], y_train)</span>
-<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>        y_pred_ols <span class="op">=</span> ols.predict(X_test[:, selected_features])</span>
-<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>        mse_ols_list.append(mean_squared_error(y_test, y_pred_ols))</span>
-<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>        mse_ols_list.append(np.nan)  <span class="co"># Handle case where LASSO selects no features</span></span>
-<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>    y_pred_lasso <span class="op">=</span> lasso.predict(X_test)</span>
-<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a>    mse_lasso_list.append(mean_squared_error(y_test, y_pred_lasso))</span>
-<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a>mean_mse_lasso <span class="op">=</span> np.nanmean(mse_lasso_list)</span>
-<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a>mean_mse_ols <span class="op">=</span> np.nanmean(mse_ols_list)</span>
-<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-39"><a href="#cb45-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of LASSO: '</span>, mean_mse_lasso)</span>
-<span id="cb45-40"><a href="#cb45-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of OLS: '</span>, mean_mse_ols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="33ab3ad9" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LassoCV, LinearRegression</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co"># A simulation with higher dimensionality (p &gt; n) and multiple runs</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>n_samples, n_features <span class="op">=</span> <span class="dv">50</span>, <span class="dv">200</span>  <span class="co"># Higher dimensionality (p &gt; n)</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>n_simulations <span class="op">=</span> <span class="dv">100</span>  <span class="co"># Number of simulations</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>mse_lasso_list <span class="op">=</span> []</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>mse_ols_list <span class="op">=</span> []</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_simulations):</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.random.randn(n_samples, n_features)</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    true_coef <span class="op">=</span> np.zeros(n_features)</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>    true_coef[:<span class="dv">10</span>] <span class="op">=</span> np.random.uniform(<span class="dv">5</span>, <span class="dv">10</span>, size<span class="op">=</span><span class="dv">10</span>)  <span class="co"># Sparse true coefficients</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> X <span class="op">@</span> true_coef <span class="op">+</span> np.random.randn(n_samples) <span class="op">*</span> <span class="dv">5</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>    lasso <span class="op">=</span> LassoCV(cv<span class="op">=</span><span class="dv">5</span>).fit(X_train, y_train)</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    selected_features <span class="op">=</span> np.where(lasso.coef_ <span class="op">!=</span> <span class="dv">0</span>)[<span class="dv">0</span>]</span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>    ols <span class="op">=</span> LinearRegression()</span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(selected_features) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>        ols.fit(X_train[:, selected_features], y_train)</span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>        y_pred_ols <span class="op">=</span> ols.predict(X_test[:, selected_features])</span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>        mse_ols_list.append(mean_squared_error(y_test, y_pred_ols))</span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a>        mse_ols_list.append(np.nan)  <span class="co"># Handle case where LASSO selects no features</span></span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>    y_pred_lasso <span class="op">=</span> lasso.predict(X_test)</span>
+<span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a>    mse_lasso_list.append(mean_squared_error(y_test, y_pred_lasso))</span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a>mean_mse_lasso <span class="op">=</span> np.nanmean(mse_lasso_list)</span>
+<span id="cb41-37"><a href="#cb41-37" aria-hidden="true" tabindex="-1"></a>mean_mse_ols <span class="op">=</span> np.nanmean(mse_ols_list)</span>
+<span id="cb41-38"><a href="#cb41-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-39"><a href="#cb41-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of LASSO: '</span>, mean_mse_lasso)</span>
+<span id="cb41-40"><a href="#cb41-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of OLS: '</span>, mean_mse_ols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Average MSE of LASSO:  428.88978884230966
-Average MSE of OLS:  442.01924050134465</code></pre>
+<pre><code>Average MSE of LASSO:  436.30426829935874
+Average MSE of OLS:  430.18356533772584</code></pre>
 </div>
 </div>
 </section>
