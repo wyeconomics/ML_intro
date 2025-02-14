@@ -120,7 +120,7 @@ plt.show()
 ```
 
 
-Let's begin our first machine learning with the following example workflow. In this workflow, we will use the `titanic` data from the `seaborn` package and predict whether a person survived or not with the predictor variables `pclass`, `sex`, `age`, `sibsp`, `parch`, and `embarked`. First, load the dataset.
+Let's begin practicing **KNN** with the following example workflow. In this workflow, we will use the `titanic` data from the `seaborn` package and predict whether a person survived or not with the predictor variables `pclass`, `sex`, `age`, `sibsp`, `parch`, and `embarked`. First, load the dataset.
 
 ```{python}
 import pandas as pd
@@ -266,8 +266,85 @@ plt.show()
 
 <br>
 
+### Tree-based Models(Decision Tree and Random Forests)
+
+#### Decision Trees
+Trees are methods applicable to both classification and prediction problems. In such sense, they're often called CART(Classification and Regression Tree). Here, we focus on decision trees, which classify the labels of data. Decision trees are based on a mechanism often called **recursive partitioning**. For details of recursive partitioning, please check [A.2.](/#sec-rpart)
+
+Let's begin with the following example workflow. In this workflow, we will use the `titanic` data from the `seaborn` package and predict whether a person survived or not with the predictor variables `pclass`, `sex`, `age`, `sibsp`, `parch`, and `embarked`. First, load the required packages and the dataset. The module for decision trees in `scikit-learn` is the `DecisionTreeClassifier` module in the `sklearn.tree` package.
+
+#### (1) Getting Ready
+
+```{python}
+import pandas as pd
+import seaborn as sns
+from sklearn.tree import DecisionTreeClassifier
+
+
+df = sns.load_dataset('titanic')
+
+df = df[['survived', 'pclass', 'sex', 'age', 'sibsp', 'parch', 'embarked']]
+
+# Dropping obs with NAs in age
+df = df.dropna(subset = ['age'], axis = 0)
+
+# Replacing obs with NAs in embarked with the mode value
+temp = df['embarked'].value_counts(dropna= True).idxmax()
+print(temp)
+
+temp = df['embarked'].fillna(temp) 
+df['embarked'] = temp
+print(df)
+```
+
+In contrast to `KNeighborsClassifier`, `DecisionTreeClassifier` does not require one-hot encoding and standardizing. However, it does require each string variable to be converted to integers using `label encoding`.
+
+```{python}
+from sklearn.preprocessing import LabelEncoder
+
+# Automatically encode all object (categorical) columns
+categorical_columns = df.select_dtypes(include=['object']).columns
+
+label_encoders = {}
+for column in categorical_columns:
+    le = LabelEncoder()
+    df[column] = le.fit_transform(df[column])
+    label_encoders[column] = le
+
+print(df)
+
+# You can check, for example, how the variable sex is encoded with the .classes_ method of label_encoders['sex'] object
+print(label_encoders['sex'].classes_) # female: 0, male: 1
+
+```
+<br>
+
+#### (2) Training and Testing
+Next, we split the data into a training set and a test set. After that we instantiate a `DecisionTreeClassifier` object, setting the maximum depth of a tree, `max_depth` to 2. `random_state` controls - sets the seed - any randomness that could happen in the decision-making process. Such randomness can happen when handling ties of multiple features, or when feature selection or bootstrap sampling is employed(We'll discuss this later).
+
+```{python}
+from sklearn.model_selection import train_test_split
+from sklearn.tree import plot_tree
+
+X = df[['pclass', 'age', 'sibsp', 'parch', 'sex', 'embarked']]
+y = df[['survived']]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 10, stratify = y)
+
+# Instantiate decision_tree
+decision_tree = DecisionTreeClassifier(max_depth=2, random_state=1)
+
+# Fit decision_tree to the training data
+decision_tree.fit(X_train, y_train)
+
+# Plot the tree
+plot_tree(decision_tree.fit(X_train, y_train))
+plt.show()
+```
+TBU
+
+
 ### Logistic Regressions
-Logistic regressions are useful for classifying binary labels. We will do this with the same dataset, `titanic`, and classify whether passengers survived or not. The following code repeats the data preprocessing, normalization, and splitting process we had in KNN.
+Logistic regressions are useful for classifying binary labels. We will do this with the same dataset, `titanic`, and classify whether passengers survived or not. The following code repeats the data preprocessing, normalization, and splitting process we had in the former examples.
 
 ```{python}
 #| message: false
@@ -626,7 +703,7 @@ r_square = reg.score(X, y)
 ```
 
 
-## Cross Validation
+## Cross Validation and Hyperparameter Tuning
 Cross validating means dividing the sample into $k$ folds, and rotate the role of test data. In each of these splits and the corresponding test-fold, we obtain $k$ model performance metrics. Through cross validation, we can check whether these $k$ metrics are similar or having peculiarities, helping us generalize the model performance to unseen data.
 
 
@@ -640,14 +717,15 @@ reg = LinearRegression() # instantiation of the model selected
 cv_results = cross_val_score(reg, X, y, cv = kf)
 ```
 
-## Hyperparameter Tuning
 
 Most ML methods require the researcher to set parameters that shape the learning process, and these parameters are called hyperparameters. Examples include number of neighbors in KNN, alpha in ridge and LASSO, and probability threshold in logistic regressions. Some hyperparameters display stronger predictive power than others in the test data. However, choosing hyperparameter based on the result from a single test set leads to an overfitting to the test set. *Thus, it is essential to use cross-validation for hyperparameter tuning.*
 
-### Why cross-validation for hyperparameter tuning?
-We have two kinds of parameters: **(1) model parameters**, and **(2) hyperparameters** that shape the model.
+<br>
 
-Model parameters are estimated based on the training set, given a specific value of hyperparameters. Thus, we can't obtain model parameter estimates and tune hyperparameters simultaneously in the training set, because the model parameter estimates are somewhat conditional on the hyperparameter value.
+### Why cross-validation for hyperparameter tuning?
+We have two kinds of parameters: **(1) model parameters**, which we estimate with the train data, and **(2) hyperparameters** which shapes the model.
+
+Model parameters are estimated based on the training set, given a specific value of hyperparameters. Thus, we can't obtain model parameter estimates and tune hyperparameters simultaneously in the training set, because the model parameter estimates are dependent on the hyperparameter value.
 
 For example, in LASSO,
 
@@ -660,7 +738,7 @@ Here $\xi^{tr}$ denotes the training data. $\alpha$ and $\beta$ denote the hyper
 If $\alpha$ is also determined by the training set, $\hat{\beta}$ reduces into $\hat{\beta}(\alpha(\xi^{tr}), \xi^{tr}) = \hat{\beta}(\xi^{tr})$. (i.e., The parameters are entirely a function of the training set). Note that in the context of LASSO, this results the same coefficients to OLS as $\alpha$ would reduce to 0. 
 
 
-Then, should we select hyperparameters based on test set(i.e., given a set of possible candidates, should we select one that best performs in the test set)? Such hyperparameters would overfit the test set; we want our hyperparameters to work well with unseen and new data. 
+Then, should we select hyperparameters based on test set(i.e., given a set of possible candidates, should we select one that best performs in the test set)? Such hyperparameters would overfit the model to the test set; we want our hyperparameters to work well with unseen and new data. 
 
 In the former example with LASSO,
 
@@ -668,20 +746,26 @@ $$
 \hat{\mathbf{\beta}_\alpha}(\xi^{tr}) = \mathrm{arg}\min_\beta MSE(\beta; \xi^{tr})+\alpha\cdot||\beta||
 $$
 
-is a function of $\xi^{tr}$ and $\alpha$. In contrast to @eq-lasso_beta, I added the subscript $\alpha$, because this is not our final choice of $\hat{\beta}$; rather, it is the interim value of $\hat{\beta}$ given a specific value of $\alpha$. The final choice of $\hat{\beta}$ would be among $\{\hat{\beta_\alpha}: \alpha \in I_\alpha\}$.
+is a function of $\xi^{tr}$ and $\alpha$. In contrast to @eq-lasso_beta, I added the subscript $\alpha$, because this is not our final choice of $\hat{\beta}$; rather, it is the interim value of $\hat{\beta}$ given a specific value of $\alpha$. The final choice of $\hat{\beta}$ would be among $\{\hat{\beta_\alpha}: \alpha \in I_\alpha\}$, whee $I_\alpha$ denotes the set of all $\alpha$'s in consideration.
 
-Behind $\alpha$ is the set of possible candidates, denoted by $I_\alpha$, and the optimization in the test set, $\xi^{te}$.  Comparing all the 
+Let $\xi^{te}$ denote the test set.  Comparing all the 
 $$
 \hat{\alpha} = \mathrm{arg}\min_{\alpha\in I_\alpha} MSE(\hat{\beta_\alpha}(\xi^{tr}); \xi^{te})+\alpha\cdot||\hat{\beta_\alpha}||
 $$
 
-The resulting best $\hat{\alpha}$ is the function of $\xi^{tr}, \xi^{te}$, and the set $I_\alpha$, and our choice of $\hat{\beta}$ would be $\hat{\beta_\hat{\alpha}}$.
+The resulting best $\hat{\alpha}$ is the function of $\xi^{tr}, \xi^{te}$, and $I_\alpha$, and our choice of $\hat{\beta}$ would be $\hat{\beta_\hat{\alpha}}$.
 
-This leads to an overfitting to the test set, because the test set determines both $\hat{\alpha}$ and $\hat{\beta}$.
+This leads to overfitting the model to the test set, because the test set determines both $\hat{\alpha}$ and $\hat{\beta}$.
 
-Now, consider k-fold cross validation. All splits assign different folds the role of a test set. Let $S_i(i=1,2,...,k)$ denote the split where the $i$-th fold takes the role of a test set. In $S_i$, let $\xi^i$ and $\xi^{-i}$ denote the test fold and training folds of that split. 
+Now, consider k-fold cross validation. All splits assign the role of a test set to different folds. Let $S_i(i=1,2,...,k)$ denote the split where the $i$-th fold takes the role of a test set. Let $\xi^i$ and $\xi^{-i}$ denote the test fold and training folds of the split, $S_i$. Just for clarity, I want to add one more notation, $\Xi(k)$, which denotes the splitting scheme. Note that although the number $k$ is determined by the researcher, the splitting scheme $\Xi(k)$ is determined randomly.
 
-TBU
+Suppose now, we want to minimize the MSE from all the $k$ folds with respect to $\alpha$.
+
+$$
+\hat{\alpha} = \mathrm{arg}\min_{\alpha\in I_\alpha} \sum_{i=1}^k\left(MSE(\hat{\beta_\alpha}(\xi^{-i}); \xi^{i})+\alpha\cdot||\hat{\beta_\alpha}||\right)
+$$
+Then, $\hat{\alpha}$ is a function of $I_\alpha$, $\Xi(k)$ and $k$. Now, although $\hat{\alpha}$ and the corresponding $\hat{\beta}_\hat{\alpha}$ are determined to fit the sample data well, they do not fit the model to a specific subset of the sample data. Instead, roughly speaking, they fit it to the splitting scheme $\Xi(k)$, which is determined randomly. This is why cross validations are often necessary for comparing different models and hyperparameters.
+
 
 ### Grid Search cross-validation
 `GridSearchCV` method from the `sklearn.model_selection` module creates a grid of possible hyperparameter values. In detail, there could be more than one hyperparameters for a prediction model. - You can choose both the number of neighbors and a metric(Euclidean or L1) in the case of KNN. - `GridSearchCV` searches through all the user-suggested values of those user-chosen set of hyperparameters.
@@ -789,8 +873,10 @@ TBU
 ### A.1. KNN Algorithm{#sec-knn_algorithm}
 TBU
 
+### A.2. Recursive Partitioning{#sec-rpart}
+At each node(except for the terminal node), a tree first chooses one covariate and the cutoff that would most help the children nodes predict the outcome variable. This is the concept of recursive partitioning. At each node, the model recursively selects a covariate and a cutoff to explain the outcome's variance. Specifically, it aims to maximize the **information gain(IG)** from the split. TBU
 
-### A.2. LASSO vs OLS
+### A.3. LASSO vs OLS
 LASSO shrinks the number of predictor variables used to explain the target. But after removing the bad predictors, *wouldn't OLS with the remaining features be a better prediction than LASSO estimates?*
 
 <br>
@@ -845,4 +931,4 @@ print('Average MSE of OLS: ', mean_mse_ols)
 ```
 
 ## References
-- (KOR) Seunghwan Oh(Ïò§ÏäπÌôò), 2019, Python Machine Learning Pandas Data Analysis(ÌååÏù¥Ïç¨ Î®∏Ïã†Îü¨Îãù ÌåêÎã§Ïä§ Îç∞Ïù¥ÌÑ∞Î∂ÑÏÑù), Ï†ïÎ≥¥Î¨∏ÌôîÏÇ¨
+- (KOR) Seunghwan Oh(ø¿Ω¬»Ø), 2019, Python Machine Learning Pandas Data Analysis(∆ƒ¿ÃΩ„ ∏”Ω≈∑Ø¥◊ ∆«¥ŸΩ∫ µ•¿Ã≈Õ∫–ºÆ), ¡§∫∏πÆ»≠ªÁ

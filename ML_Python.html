@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.56">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Wooyong Park">
-<meta name="dcterms.date" content="2025-01-25">
+<meta name="dcterms.date" content="2025-02-14">
 
 <title>Machine Learning with Python</title>
 <style>
@@ -65,10 +65,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="ML_Python_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="ML_Python_files/libs/quarto-html/anchor.min.js"></script>
 <link href="ML_Python_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="ML_Python_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="ML_Python_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="ML_Python_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="ML_Python_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="ML_Python_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="ML_Python_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -121,6 +121,7 @@ window.Quarto = {
   <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification">Classification</a>
   <ul class="collapse">
   <li><a href="#k-nearest-neighborsknn" id="toc-k-nearest-neighborsknn" class="nav-link" data-scroll-target="#k-nearest-neighborsknn">k-Nearest Neighbors(KNN)</a></li>
+  <li><a href="#tree-based-modelsdecision-tree-and-random-forests" id="toc-tree-based-modelsdecision-tree-and-random-forests" class="nav-link" data-scroll-target="#tree-based-modelsdecision-tree-and-random-forests">Tree-based Models(Decision Tree and Random Forests)</a></li>
   <li><a href="#logistic-regressions" id="toc-logistic-regressions" class="nav-link" data-scroll-target="#logistic-regressions">Logistic Regressions</a></li>
   </ul></li>
   <li><a href="#predictions" id="toc-predictions" class="nav-link" data-scroll-target="#predictions">Predictions</a>
@@ -139,8 +140,7 @@ window.Quarto = {
   <li><a href="#f1-score" id="toc-f1-score" class="nav-link" data-scroll-target="#f1-score">F1 Score</a></li>
   <li><a href="#r-squared-and-mse" id="toc-r-squared-and-mse" class="nav-link" data-scroll-target="#r-squared-and-mse">R-Squared and MSE</a></li>
   </ul></li>
-  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">Cross Validation</a></li>
-  <li><a href="#hyperparameter-tuning" id="toc-hyperparameter-tuning" class="nav-link" data-scroll-target="#hyperparameter-tuning">Hyperparameter Tuning</a>
+  <li><a href="#cross-validation-and-hyperparameter-tuning" id="toc-cross-validation-and-hyperparameter-tuning" class="nav-link" data-scroll-target="#cross-validation-and-hyperparameter-tuning">Cross Validation and Hyperparameter Tuning</a>
   <ul class="collapse">
   <li><a href="#why-cross-validation-for-hyperparameter-tuning" id="toc-why-cross-validation-for-hyperparameter-tuning" class="nav-link" data-scroll-target="#why-cross-validation-for-hyperparameter-tuning">Why cross-validation for hyperparameter tuning?</a></li>
   <li><a href="#grid-search-cross-validation" id="toc-grid-search-cross-validation" class="nav-link" data-scroll-target="#grid-search-cross-validation">Grid Search cross-validation</a></li>
@@ -154,7 +154,8 @@ window.Quarto = {
   <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
   <ul class="collapse">
   <li><a href="#sec-knn_algorithm" id="toc-sec-knn_algorithm" class="nav-link" data-scroll-target="#sec-knn_algorithm">A.1. KNN Algorithm</a></li>
-  <li><a href="#a.2.-lasso-vs-ols" id="toc-a.2.-lasso-vs-ols" class="nav-link" data-scroll-target="#a.2.-lasso-vs-ols">A.2. LASSO vs OLS</a></li>
+  <li><a href="#sec-rpart" id="toc-sec-rpart" class="nav-link" data-scroll-target="#sec-rpart">A.2. Recursive Partitioning</a></li>
+  <li><a href="#a.3.-lasso-vs-ols" id="toc-a.3.-lasso-vs-ols" class="nav-link" data-scroll-target="#a.3.-lasso-vs-ols">A.3. LASSO vs OLS</a></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -183,7 +184,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 25, 2025</p>
+      <p class="date">February 14, 2025</p>
     </div>
   </div>
   
@@ -230,7 +231,7 @@ window.Quarto = {
 <p>Supervised learning is classified as prediction or classification, according to whether the “target variable” is continuous or discrete. We aim to predict/classify the target variable’s value based on the values of “predictor variables”.</p>
 <section id="example-workflow" class="level3">
 <h3 class="anchored" data-anchor-id="example-workflow">Example Workflow</h3>
-<div id="a05989c7" class="cell" data-execution_count="1">
+<div id="5feeac9d" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.module <span class="im">import</span> Model   <span class="co">#import the type of algorithm</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Model() <span class="co">#instantiate the model</span></span>
@@ -246,7 +247,7 @@ window.Quarto = {
 <section id="k-nearest-neighborsknn" class="level3">
 <h3 class="anchored" data-anchor-id="k-nearest-neighborsknn">k-Nearest Neighbors(KNN)</h3>
 <p><strong>k-Nearest Neighbors</strong>, more often called as <strong>KNN</strong> predicts the label by looking at the <code>k</code> closest labelled data points, and take the majority value of label as the observation’s label value.</p>
-<div id="bc1e0db8" class="cell" data-execution_count="2">
+<div id="4bd00def" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -256,17 +257,17 @@ window.Quarto = {
 </div>
 </div>
 <p>The natural question following would be “How should I choose the right <code>k</code>?” A smaller <code>k</code> would mean that individual data gains more power in the classification, which would turn more complex models and overfitting. Likewise, if <code>k</code> is too large, it would give too simple models and cause underfitting. Hence, the question also faces the <strong>bias-variance tradeoff</strong> and researchers should be careful not to arrive at both extremes. For a theoretical background for KNN, please go to <a href="./#sec-knn_algorithm">A.1.</a></p>
-<div id="5e4ca1b5" class="cell" data-execution_count="3">
+<div id="607ae60b" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ML_Python_files/figure-html/cell-4-output-1.png" width="1429" height="468" class="figure-img"></p>
+<p><img src="ML_Python_files/figure-html/cell-4-output-1.png" width="1430" height="470" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Let’s begin our first machine learning with the following example workflow. In this workflow, we will use the <code>titanic</code> data from the <code>seaborn</code> package and predict whether a person survived or not with the predictor variables <code>pclass</code>, <code>sex</code>, <code>age</code>, <code>sibsp</code>, <code>parch</code>, and <code>embarked</code>. First, load the dataset.</p>
-<div id="73bbce22" class="cell" data-execution_count="4">
+<p>Let’s begin practicing <strong>KNN</strong> with the following example workflow. In this workflow, we will use the <code>titanic</code> data from the <code>seaborn</code> package and predict whether a person survived or not with the predictor variables <code>pclass</code>, <code>sex</code>, <code>age</code>, <code>sibsp</code>, <code>parch</code>, and <code>embarked</code>. First, load the dataset.</p>
+<div id="f948dc19" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
@@ -291,7 +292,7 @@ window.Quarto = {
 <section id="getting-ready" class="level4">
 <h4 class="anchored" data-anchor-id="getting-ready">(1) Getting Ready</h4>
 <p>Then, we choose the variables to use in the classification, drop or replace <code>NA</code> values, and further process the data to get things ready.</p>
-<div id="8754526d" class="cell" data-execution_count="5">
+<div id="e08878a0" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[[<span class="st">'survived'</span>, <span class="st">'pclass'</span>, <span class="st">'sex'</span>, <span class="st">'age'</span>, <span class="st">'sibsp'</span>, <span class="st">'parch'</span>, <span class="st">'embarked'</span>]]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropping obs with NAs in age</span></span>
@@ -322,7 +323,7 @@ window.Quarto = {
 [714 rows x 7 columns]</code></pre>
 </div>
 </div>
-<div id="4525ff8d" class="cell" data-execution_count="6">
+<div id="6057ee12" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating dummies for sex and embarked (one-hot-encoding)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
@@ -371,7 +372,7 @@ window.Quarto = {
 <section id="normalization-and-splitting-data" class="level4">
 <h4 class="anchored" data-anchor-id="normalization-and-splitting-data">(2) Normalization and Splitting data</h4>
 <p>One of the most important factors in distance-based algorithms(KNN, K-Means, etc.) and gradient-based algorithms(logistic regression, neural networks) is the <strong><em>normalization</em></strong> of predictor values. This is because input values with larger scales could have a larger effect on calculating the distance between observations. To eliminate such concern, normalization is necessary. In <code>sci-kit learn</code>, we do this with the <code>preprocessing</code> module.</p>
-<div id="6416b44e" class="cell" data-execution_count="7">
+<div id="429c76a8" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Before:'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span>
@@ -427,7 +428,7 @@ After:
 <p>In the code above, <code>preprocessing.StandardScaler()</code> instantiates a scaling process, and the first method, <code>fit(X)</code>, receives <code>X</code> and returns the sample mean and the sample variance of each column. Then, the second method, <code>transform(X)</code> returns the rescaled (transformed) X values according to the values from <code>fit(X)</code>. We replace the original <code>X</code> with this new instantiation of the scaler.</p>
 <p><br></p>
 <p>Finally, the last stage of preprocessing data is to split the data into a training set and a test set. Here, we split them in a 7:3 ratio. Also, we often want the <code>y</code> values to occur symmetrically for the training and test sets. To do this, we add the optional argument <code>stratify=y</code>.</p>
-<div id="3d3ab515" class="cell" data-execution_count="8">
+<div id="1158a131" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>, stratify <span class="op">=</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -436,7 +437,7 @@ After:
 </section>
 <section id="training-and-testing" class="level4">
 <h4 class="anchored" data-anchor-id="training-and-testing">(3) Training and Testing</h4>
-<div id="1562cec0" class="cell" data-message="false" data-execution_count="9">
+<div id="59096af4" class="cell" data-message="false" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiating KNN</span></span>
@@ -461,7 +462,7 @@ After:
 <h4 class="anchored" data-anchor-id="model-performance">(4) Model Performance</h4>
 <p>After train/test process is done, we summarize the model performance with confusion matrix and the classification report.</p>
 <p>For detailed explanation of measuring model performances in supervised learning, go to <a href="#sec-model_performance" class="quarto-xref">Section&nbsp;5</a>.</p>
-<div id="5825faa8" class="cell" data-execution_count="10">
+<div id="056c2b77" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> metrics</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># confusion matrix</span></span>
@@ -536,14 +537,20 @@ Figure&nbsp;1: Model Complexity Curve
 <p><br></p>
 </section>
 </section>
-<section id="logistic-regressions" class="level3">
-<h3 class="anchored" data-anchor-id="logistic-regressions">Logistic Regressions</h3>
-<p>Logistic regressions are useful for classifying binary labels. We will do this with the same dataset, <code>titanic</code>, and classify whether passengers survived or not. The following code repeats the data preprocessing, normalization, and splitting process we had in KNN.</p>
-<div id="dc667085" class="cell" data-message="false" data-execution_count="12">
+<section id="tree-based-modelsdecision-tree-and-random-forests" class="level3">
+<h3 class="anchored" data-anchor-id="tree-based-modelsdecision-tree-and-random-forests">Tree-based Models(Decision Tree and Random Forests)</h3>
+<section id="decision-trees" class="level4">
+<h4 class="anchored" data-anchor-id="decision-trees">Decision Trees</h4>
+<p>Trees are methods applicable to both classification and prediction problems. In such sense, they’re often called CART(Classification and Regression Tree). Here, we focus on decision trees, which classify the labels of data. Decision trees are based on a mechanism often called <strong>recursive partitioning</strong>. For details of recursive partitioning, please check <a href="./#sec-rpart">A.2.</a></p>
+<p>Let’s begin with the following example workflow. In this workflow, we will use the <code>titanic</code> data from the <code>seaborn</code> package and predict whether a person survived or not with the predictor variables <code>pclass</code>, <code>sex</code>, <code>age</code>, <code>sibsp</code>, <code>parch</code>, and <code>embarked</code>. First, load the required packages and the dataset. The module for decision trees in <code>scikit-learn</code> is the <code>DecisionTreeClassifier</code> module in the <code>sklearn.tree</code> package.</p>
+</section>
+<section id="getting-ready-1" class="level4">
+<h4 class="anchored" data-anchor-id="getting-ready-1">(1) Getting Ready</h4>
+<div id="d871853c" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">'titanic'</span>)</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
@@ -554,68 +561,177 @@ Figure&nbsp;1: Model Complexity Curve
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Replacing obs with NAs in embarked with the mode value</span></span>
 <span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> df[<span class="st">'embarked'</span>].value_counts(dropna<span class="op">=</span> <span class="va">True</span>).idxmax()</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> df[<span class="st">'embarked'</span>].fillna(temp) </span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'embarked'</span>] <span class="op">=</span> temp</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>onehot_embarked <span class="op">=</span> pd.get_dummies(df[<span class="st">'embarked'</span>], prefix <span class="op">=</span> <span class="st">'town'</span>)</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, onehot_sex], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, onehot_embarked], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop([<span class="st">'sex'</span>, <span class="st">'embarked'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">'pclass'</span>, <span class="st">'age'</span>, <span class="st">'sibsp'</span>, <span class="st">'parch'</span>, <span class="st">'female'</span>, <span class="st">'male'</span>, <span class="st">'town_C'</span>, <span class="st">'town_Q'</span>, <span class="st">'town_S'</span>]]</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'survived'</span>]]</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> preprocessing.StandardScaler().fit(X).transform(X)</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>, stratify <span class="op">=</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(temp)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> df[<span class="st">'embarked'</span>].fillna(temp) </span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'embarked'</span>] <span class="op">=</span> temp</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>S
+     survived  pclass     sex   age  sibsp  parch embarked
+0           0       3    male  22.0      1      0        S
+1           1       1  female  38.0      1      0        C
+2           1       3  female  26.0      0      0        S
+3           1       1  female  35.0      1      0        S
+4           0       3    male  35.0      0      0        S
+..        ...     ...     ...   ...    ...    ...      ...
+885         0       3  female  39.0      0      5        Q
+886         0       2    male  27.0      0      0        S
+887         1       1  female  19.0      0      0        S
+889         1       1    male  26.0      0      0        C
+890         0       3    male  32.0      0      0        Q
+
+[714 rows x 7 columns]</code></pre>
 </div>
+</div>
+<p>In contrast to <code>KNeighborsClassifier</code>, <code>DecisionTreeClassifier</code> does not require one-hot encoding and standardizing. However, it does require each string variable to be converted to integers using <code>label encoding</code>.</p>
+<div id="b2907b31" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Automatically encode all object (categorical) columns</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>categorical_columns <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[<span class="st">'object'</span>]).columns</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>label_encoders <span class="op">=</span> {}</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> categorical_columns:</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    le <span class="op">=</span> LabelEncoder()</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    df[column] <span class="op">=</span> le.fit_transform(df[column])</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    label_encoders[column] <span class="op">=</span> le</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co"># You can check, for example, how the variable sex is encoded with the .classes_ method of label_encoders['sex'] object</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(label_encoders[<span class="st">'sex'</span>].classes_) <span class="co"># female: 0, male: 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     survived  pclass  sex   age  sibsp  parch  embarked
+0           0       3    1  22.0      1      0         2
+1           1       1    0  38.0      1      0         0
+2           1       3    0  26.0      0      0         2
+3           1       1    0  35.0      1      0         2
+4           0       3    1  35.0      0      0         2
+..        ...     ...  ...   ...    ...    ...       ...
+885         0       3    0  39.0      0      5         1
+886         0       2    1  27.0      0      0         2
+887         1       1    0  19.0      0      0         2
+889         1       1    1  26.0      0      0         0
+890         0       3    1  32.0      0      0         1
+
+[714 rows x 7 columns]
+['female' 'male']</code></pre>
+</div>
+</div>
+<p><br></p>
+</section>
 <section id="training-and-testing-1" class="level4">
-<h4 class="anchored" data-anchor-id="training-and-testing-1">(1) Training and Testing</h4>
+<h4 class="anchored" data-anchor-id="training-and-testing-1">(2) Training and Testing</h4>
+<p>Next, we split the data into a training set and a test set. After that we instantiate a <code>DecisionTreeClassifier</code> object, setting the maximum depth of a tree, <code>max_depth</code> to 2. <code>random_state</code> controls - sets the seed - any randomness that could happen in the decision-making process. Such randomness can happen when handling ties of multiple features, or when feature selection or bootstrap sampling is employed(We’ll discuss this later).</p>
+<div id="390b00de" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> plot_tree</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">'pclass'</span>, <span class="st">'age'</span>, <span class="st">'sibsp'</span>, <span class="st">'parch'</span>, <span class="st">'sex'</span>, <span class="st">'embarked'</span>]]</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'survived'</span>]]</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>, stratify <span class="op">=</span> y)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Instantiate decision_tree</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>decision_tree <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit decision_tree to the training data</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>decision_tree.fit(X_train, y_train)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the tree</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>plot_tree(decision_tree.fit(X_train, y_train))</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ML_Python_files/figure-html/cell-15-output-1.png" width="540" height="389" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>TBU</p>
+</section>
+</section>
+<section id="logistic-regressions" class="level3">
+<h3 class="anchored" data-anchor-id="logistic-regressions">Logistic Regressions</h3>
+<p>Logistic regressions are useful for classifying binary labels. We will do this with the same dataset, <code>titanic</code>, and classify whether passengers survived or not. The following code repeats the data preprocessing, normalization, and splitting process we had in the former examples.</p>
+<div id="3327a2ca" class="cell" data-message="false" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">'titanic'</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[[<span class="st">'survived'</span>, <span class="st">'pclass'</span>, <span class="st">'sex'</span>, <span class="st">'age'</span>, <span class="st">'sibsp'</span>, <span class="st">'parch'</span>, <span class="st">'embarked'</span>]]</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropping obs with NAs in age</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna(subset <span class="op">=</span> [<span class="st">'age'</span>], axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Replacing obs with NAs in embarked with the mode value</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> df[<span class="st">'embarked'</span>].value_counts(dropna<span class="op">=</span> <span class="va">True</span>).idxmax()</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> df[<span class="st">'embarked'</span>].fillna(temp) </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'embarked'</span>] <span class="op">=</span> temp</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>onehot_embarked <span class="op">=</span> pd.get_dummies(df[<span class="st">'embarked'</span>], prefix <span class="op">=</span> <span class="st">'town'</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, onehot_sex], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, onehot_embarked], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop([<span class="st">'sex'</span>, <span class="st">'embarked'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">'pclass'</span>, <span class="st">'age'</span>, <span class="st">'sibsp'</span>, <span class="st">'parch'</span>, <span class="st">'female'</span>, <span class="st">'male'</span>, <span class="st">'town_C'</span>, <span class="st">'town_Q'</span>, <span class="st">'town_S'</span>]]</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'survived'</span>]]</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> preprocessing.StandardScaler().fit(X).transform(X)</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>, stratify <span class="op">=</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="training-and-testing-2" class="level4">
+<h4 class="anchored" data-anchor-id="training-and-testing-2">(1) Training and Testing</h4>
 <p>Next, we instantiate a <code>LogisticRegression()</code> object and train it with the data. The <code>.predict(X_test)</code> method returns the predicted class of the test data, and <code>.predict_proba(X_test)</code> returns the predicted probability of each class.</p>
 <ul>
 <li><code>.predict(X_test)</code>: predicted class</li>
 <li><code>.predict_proba(X_test)</code> : predicted probability of each class(the probability threshold is 0.5)</li>
 <li><code>.predict_log_proba(X_test)</code> : predicted log-probability of each class</li>
 </ul>
-<div id="00ba41ea" class="cell" data-message="false" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression()</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>logreg.fit(X_train, y_train)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> logreg.predict(X_test)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>y_pred_probs <span class="op">=</span> logreg.predict_proba(X_test)[:, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="f1aee07b" class="cell" data-message="false" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression()</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>logreg.fit(X_train, y_train)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> logreg.predict(X_test)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>y_pred_probs <span class="op">=</span> logreg.predict_proba(X_test)[:, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="roc--auc" class="level4">
 <h4 class="anchored" data-anchor-id="roc--auc">(2) ROC- AUC</h4>
 <p>By default, probability threshold for logistic regressions in <code>scikit-learn</code> is 0.5. However, the right threshold could vary across cases. Thus, to obtain the right threshold, we could plot <span class="math inline">\(1-\mathrm{specificity}\)</span> (on the X-axis) and <span class="math inline">\(\mathrm{sensitivity}\)</span> (on the Y-axis), which is called the <strong>ROC curve(Receiver Operating Characteristics)</strong>.</p>
-<div id="3ec03168" class="cell" data-message="false" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>one_m_spec, sens, thresholds <span class="op">=</span> roc_curve(y_test, y_pred_probs)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>,<span class="dv">1</span>], [<span class="dv">0</span>,<span class="dv">1</span>], <span class="st">'k--'</span>)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>plt.plot(one_m_spec, sens)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"False Positive Rate(1-Spec)"</span>)</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"True Positive Rate(Sens)"</span>)</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Logistic Regression ROC Curve"</span>)</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="048fbbea" class="cell" data-message="false" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>one_m_spec, sens, thresholds <span class="op">=</span> roc_curve(y_test, y_pred_probs)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>plt.plot([<span class="dv">0</span>,<span class="dv">1</span>], [<span class="dv">0</span>,<span class="dv">1</span>], <span class="st">'k--'</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>plt.plot(one_m_spec, sens)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"False Positive Rate(1-Spec)"</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"True Positive Rate(Sens)"</span>)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Logistic Regression ROC Curve"</span>)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ML_Python_files/figure-html/cell-15-output-1.png" width="589" height="449" class="figure-img"></p>
+<p><img src="ML_Python_files/figure-html/cell-18-output-1.png" width="589" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>ROC curve illustrates how the model performs on the test data. The more the shape of ROC curve looks like <span class="math inline">\(\Gamma\)</span>, the better. - we can find a threshold that attains larger sensitivity and specificity - Area under the curve, <strong>AUC</strong>, is the summarized value of such model performance. Its value range between 0 and 1, with 1 being ideal.</p>
-<div id="0e1c697c" class="cell" data-message="false" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roc_auc_score(y_test, y_pred_probs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="67176271" class="cell" data-message="false" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roc_auc_score(y_test, y_pred_probs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.836206896551724</code></pre>
 </div>
@@ -627,13 +743,13 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="predictions" class="level2">
 <h2 class="anchored" data-anchor-id="predictions">Predictions</h2>
 <p>Prediction is simply running regressions and using the fitted values as the predicted values of outcome. The process of such practice is not much different from classifications. Let’s begin by loading the data.</p>
-<div id="8168cf9c" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">'penguins'</span>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="119">
+<div id="2bc728da" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">'penguins'</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
 <div>
 
 
@@ -708,20 +824,20 @@ Figure&nbsp;1: Model Complexity Curve
 </div>
 </div>
 <p>With the <code>penguins</code> data from the <code>seaborn</code> package, we’d like to predict each penguin’s <code>body_mass_g</code> based on its <code>species</code>, <code>bill_length_mm</code>, <code>bill_depth_mm</code>, <code>flipper_length_mm</code>, and <code>sex</code>.</p>
-<div id="a34618ec" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna(subset <span class="op">=</span> [<span class="st">'sex'</span>, <span class="st">'body_mass_g'</span>], how <span class="op">=</span> <span class="st">'any'</span>, axis <span class="op">=</span> <span class="dv">0</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>onehot_species <span class="op">=</span> pd.get_dummies(df[<span class="st">'species'</span>], prefix <span class="op">=</span> <span class="st">'species'</span>)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, onehot_sex], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, onehot_species], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop([<span class="st">'sex'</span>, <span class="st">'species'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'body_mass_g'</span>, axis <span class="op">=</span> <span class="dv">1</span>).values</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="9402a893" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna(subset <span class="op">=</span> [<span class="st">'sex'</span>, <span class="st">'body_mass_g'</span>], how <span class="op">=</span> <span class="st">'any'</span>, axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>onehot_species <span class="op">=</span> pd.get_dummies(df[<span class="st">'species'</span>], prefix <span class="op">=</span> <span class="st">'species'</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, onehot_sex], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, onehot_species], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop([<span class="st">'sex'</span>, <span class="st">'species'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(<span class="st">'body_mass_g'</span>, axis <span class="op">=</span> <span class="dv">1</span>).values</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        island  bill_length_mm  bill_depth_mm  flipper_length_mm  body_mass_g  \
 0    Torgersen            39.1           18.7              181.0       3750.0   
@@ -755,49 +871,49 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="sec-univ_reg" class="level3">
 <h3 class="anchored" data-anchor-id="sec-univ_reg">Univariate Regression</h3>
 <p>A univariate regression, or more specifically a simple linear regression, regresses <code>y</code> on a single predictor variable <code>x</code>. Let’s consider a simple case of regressing <code>body_mass_g</code> on <code>flipper_length_mm</code>.</p>
-<div id="d1c0830a" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize <span class="op">=</span> (<span class="dv">9</span>,<span class="dv">5</span>))</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>df.plot(kind<span class="op">=</span><span class="st">'scatter'</span>, x<span class="op">=</span><span class="st">'flipper_length_mm'</span>, y<span class="op">=</span><span class="st">'body_mass_g'</span>, c<span class="op">=</span><span class="st">'coral'</span>, ax<span class="op">=</span>ax1)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span><span class="st">'flipper_length_mm'</span>, y<span class="op">=</span><span class="st">'body_mass_g'</span>, data<span class="op">=</span>df, scatter_kws<span class="op">=</span>{<span class="st">"alpha"</span>: <span class="fl">0.5</span>}, ax<span class="op">=</span>ax2)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="816dec51" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize <span class="op">=</span> (<span class="dv">9</span>,<span class="dv">5</span>))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>df.plot(kind<span class="op">=</span><span class="st">'scatter'</span>, x<span class="op">=</span><span class="st">'flipper_length_mm'</span>, y<span class="op">=</span><span class="st">'body_mass_g'</span>, c<span class="op">=</span><span class="st">'coral'</span>, ax<span class="op">=</span>ax1)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span><span class="st">'flipper_length_mm'</span>, y<span class="op">=</span><span class="st">'body_mass_g'</span>, data<span class="op">=</span>df, scatter_kws<span class="op">=</span>{<span class="st">"alpha"</span>: <span class="fl">0.5</span>}, ax<span class="op">=</span>ax2)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="ML_Python_files/figure-html/cell-19-output-1.png" width="750" height="429" class="figure-img"></p>
+<p><img src="ML_Python_files/figure-html/cell-22-output-1.png" width="750" height="429" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>In the code below, we will split the data into training set and test set(7:3), calculate the model performance with R-squared in the test set, and print out the linear coefficients.</p>
-<div id="64df8185" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df[[<span class="st">'flipper_length_mm'</span>]]</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>x_train, x_test, y_train, y_test <span class="op">=</span> train_test_split(x, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiate linear regression</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression()</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># train the data</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>reg.fit(x_train, y_train)</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate R-squared</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(x_test, y_test)</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'R-squared: '</span>, r_square)</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="co"># print the slope and the intercept</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'slope: '</span>, reg.coef_)</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept: '</span>, reg.intercept_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="98c373f0" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df[[<span class="st">'flipper_length_mm'</span>]]</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>x_train, x_test, y_train, y_test <span class="op">=</span> train_test_split(x, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiate linear regression</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression()</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="co"># train the data</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>reg.fit(x_train, y_train)</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate R-squared</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(x_test, y_test)</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'R-squared: '</span>, r_square)</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="co"># print the slope and the intercept</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'slope: '</span>, reg.coef_)</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept: '</span>, reg.intercept_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R-squared:  0.6908213440414696
+<pre><code>R-squared:  0.6908213440414697
 slope:  [[50.50455071]]
 intercept:  [-5947.85540739]</code></pre>
 </div>
@@ -806,71 +922,71 @@ intercept:  [-5947.85540739]</code></pre>
 <section id="multinomial-regression-with-polynomialfeatures" class="level3">
 <h3 class="anchored" data-anchor-id="multinomial-regression-with-polynomialfeatures">Multinomial Regression with <code>PolynomialFeatures</code></h3>
 <p>Following the codes in <a href="#sec-univ_reg" class="quarto-xref">Section&nbsp;4.1</a>, we will introduce a quadratic and a cubic term of X to the regression.</p>
-<div id="cf8f90d2" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df[[<span class="st">'flipper_length_mm'</span>]]</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>x_train, x_test, y_train, y_test <span class="op">=</span> train_test_split(x, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>)</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># adding polynomials</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> PolynomialFeatures(degree <span class="op">=</span> <span class="dv">3</span>)</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>x_train_poly <span class="op">=</span> poly.fit_transform(x_train)</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>x_test_poly <span class="op">=</span> poly.fit_transform(x_test)</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'x_train shape: '</span>, x_train.shape)</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'x_train_poly shape: '</span>, x_train_poly.shape)</span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiate linear regression</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression()</span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="co"># train the data</span></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>reg.fit(x_train_poly, y_train)</span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate R-squared</span></span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(x_test_poly, y_test)</span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'R-squared: '</span>, r_square)</span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a><span class="co"># print the slope and the intercept</span></span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'slope: '</span>, reg.coef_)</span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept: '</span>, reg.intercept_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4418eb3f" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df[[<span class="st">'flipper_length_mm'</span>]]</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>x_train, x_test, y_train, y_test <span class="op">=</span> train_test_split(x, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co"># adding polynomials</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> PolynomialFeatures(degree <span class="op">=</span> <span class="dv">3</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>x_train_poly <span class="op">=</span> poly.fit_transform(x_train)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>x_test_poly <span class="op">=</span> poly.fit_transform(x_test)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'x_train shape: '</span>, x_train.shape)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'x_train_poly shape: '</span>, x_train_poly.shape)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiate linear regression</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression()</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="co"># train the data</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>reg.fit(x_train_poly, y_train)</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate R-squared</span></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(x_test_poly, y_test)</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'R-squared: '</span>, r_square)</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a><span class="co"># print the slope and the intercept</span></span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'slope: '</span>, reg.coef_)</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept: '</span>, reg.intercept_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>x_train shape:  (233, 1)
 x_train_poly shape:  (233, 4)
-R-squared:  0.7277186999281051
+R-squared:  0.7277186999187835
 slope:  [[ 0.00000000e+00 -2.19281026e+03  1.06376941e+01 -1.67427890e-02]]
-intercept:  [151056.40372225]</code></pre>
+intercept:  [151056.40370382]</code></pre>
 </div>
 </div>
 <p><br></p>
 </section>
 <section id="multivariate-regressions" class="level3">
 <h3 class="anchored" data-anchor-id="multivariate-regressions">Multivariate Regressions</h3>
-<div id="c92c03b2" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop([<span class="st">'body_mass_g'</span>, <span class="st">'island'</span>, <span class="st">'Male'</span>, <span class="st">'species_Gentoo'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>)</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiate linear regression</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression()</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># train the data</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>reg.fit(X_train, y_train)</span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate R-squared</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(X_test, y_test)</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'R-squared: '</span>, r_square)</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># print the slope and the intercept</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'covariates: '</span>, <span class="bu">list</span>(X_test.columns))</span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'slope: '</span>, reg.coef_)</span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept: '</span>, reg.intercept_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ad0731c6" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop([<span class="st">'body_mass_g'</span>, <span class="st">'island'</span>, <span class="st">'Male'</span>, <span class="st">'species_Gentoo'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiate linear regression</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression()</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># train the data</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>reg.fit(X_train, y_train)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate R-squared</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(X_test, y_test)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'R-squared: '</span>, r_square)</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="co"># print the slope and the intercept</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'covariates: '</span>, <span class="bu">list</span>(X_test.columns))</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'slope: '</span>, reg.coef_)</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept: '</span>, reg.intercept_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R-squared:  0.8480141789076939
+<pre><code>R-squared:  0.8480141789076938
 covariates:  ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'Female', 'species_Adelie', 'species_Chinstrap']
 slope:  [[   12.26524581    77.29979709    18.82252667  -366.33908719
   -1022.18520551 -1190.49839881]]
@@ -894,17 +1010,17 @@ intercept:  [-574.49999499]</code></pre>
 <li>Here, <span class="math inline">\(\alpha\)</span> is called a <em>hyperparameter</em>, a parameter that we choose to optimize the prediction.</li>
 <li>In the case of <span class="math inline">\(\alpha = 0\)</span>, ridge regrerssions would be equivalent to OLS.</li>
 </ul>
-<div id="574a1a67" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Ridge</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># scores = [] #initiate an empty list to record R-squared</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for alpha in range(-1, 4): </span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   ridge = Ridge(alpha = 10**alpha)</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   ridge.fit(X_train, y_train)</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   y_pred = ridge.predict(X_test)</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   scores.append(ridge.score(X_test, y_test))</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># print(scores)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="160dc1f9" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Ridge</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># scores = [] #initiate an empty list to record R-squared</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for alpha in range(-1, 4): </span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   ridge = Ridge(alpha = 10**alpha)</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   ridge.fit(X_train, y_train)</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   y_pred = ridge.predict(X_test)</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   scores.append(ridge.score(X_test, y_test))</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># print(scores)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="lassos" class="level4">
@@ -915,11 +1031,11 @@ intercept:  [-574.49999499]</code></pre>
 <li>In the case of <span class="math inline">\(\alpha = 0\)</span>, LASSO would be equivalent to OLS.</li>
 <li>LASSO shrinks the coefficients of less important features to zero</li>
 </ul>
-<div id="54230e53" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.linear_model import Lasso</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># lasso = Lasso(alpha=0.1)</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># lasso_coef = lasso.fit(X, y).coef_</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="644f27e3" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.linear_model import Lasso</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># lasso = Lasso(alpha=0.1)</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># lasso_coef = lasso.fit(X, y).coef_</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -1039,72 +1155,73 @@ TN
 <p>Loss function represents the amount of information loss incurred by using the predicted values rather than actual target values. The most common loss function is the mean squared error function(a.k.a. quadratic loss function), which is equal to the residual sum of squares divided by the number of observations.</p>
 <p><span class="math display">\[ MSE = \frac{1}{n}\sum_{i=1}^n(y_i-\hat{y}_i)^2 \]</span> <span class="math display">\[ RSS = \sum_{i=1}^n(y_i-\hat{y}_i)^2 \]</span></p>
 <p><code>mean_squared_error</code> function from <code>sklearn.metrics</code> calculates the MSE of a given model.</p>
-<div id="6112bc18" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>mean_squared_error(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="903f1134" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>mean_squared_error(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>R-squared(<span class="math inline">\(R^2\)</span>) quantifies the portion explained by the predictor variables of the variance of the target variable. The value ranges from 0 to 1, and a higher value implies that the predictor variables explain the target well.</p>
 <p><span class="math display">\[ R^2 = 1-\frac{RSS}{TSS}\]</span> <span class="math display">\[ TSS = \sum_{i=1}^n(y_i-\bar{y})^2\]</span></p>
 <p>It is calculated by the <code>score</code> method of a regression object.</p>
-<div id="64e42e0e" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="19e810ab" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
-<section id="cross-validation" class="level2">
-<h2 class="anchored" data-anchor-id="cross-validation">Cross Validation</h2>
+<section id="cross-validation-and-hyperparameter-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation-and-hyperparameter-tuning">Cross Validation and Hyperparameter Tuning</h2>
 <p>Cross validating means dividing the sample into <span class="math inline">\(k\)</span> folds, and rotate the role of test data. In each of these splits and the corresponding test-fold, we obtain <span class="math inline">\(k\)</span> model performance metrics. Through cross validation, we can check whether these <span class="math inline">\(k\)</span> metrics are similar or having peculiarities, helping us generalize the model performance to unseen data.</p>
-<div id="be8ef234" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score, KFold</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>) <span class="co"># "shuffle = True" shuffles the data before splitting the data</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression() <span class="co"># instantiation of the model selected</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>cv_results <span class="op">=</span> cross_val_score(reg, X, y, cv <span class="op">=</span> kf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3cdaa0d8" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score, KFold</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>) <span class="co"># "shuffle = True" shuffles the data before splitting the data</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression() <span class="co"># instantiation of the model selected</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>cv_results <span class="op">=</span> cross_val_score(reg, X, y, cv <span class="op">=</span> kf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="hyperparameter-tuning" class="level2">
-<h2 class="anchored" data-anchor-id="hyperparameter-tuning">Hyperparameter Tuning</h2>
 <p>Most ML methods require the researcher to set parameters that shape the learning process, and these parameters are called hyperparameters. Examples include number of neighbors in KNN, alpha in ridge and LASSO, and probability threshold in logistic regressions. Some hyperparameters display stronger predictive power than others in the test data. However, choosing hyperparameter based on the result from a single test set leads to an overfitting to the test set. <em>Thus, it is essential to use cross-validation for hyperparameter tuning.</em></p>
+<p><br></p>
 <section id="why-cross-validation-for-hyperparameter-tuning" class="level3">
 <h3 class="anchored" data-anchor-id="why-cross-validation-for-hyperparameter-tuning">Why cross-validation for hyperparameter tuning?</h3>
-<p>We have two kinds of parameters: <strong>(1) model parameters</strong>, and <strong>(2) hyperparameters</strong> that shape the model.</p>
-<p>Model parameters are estimated based on the training set, given a specific value of hyperparameters. Thus, we can’t obtain model parameter estimates and tune hyperparameters simultaneously in the training set, because the model parameter estimates are somewhat conditional on the hyperparameter value.</p>
+<p>We have two kinds of parameters: <strong>(1) model parameters</strong>, which we estimate with the train data, and <strong>(2) hyperparameters</strong> which shapes the model.</p>
+<p>Model parameters are estimated based on the training set, given a specific value of hyperparameters. Thus, we can’t obtain model parameter estimates and tune hyperparameters simultaneously in the training set, because the model parameter estimates are dependent on the hyperparameter value.</p>
 <p>For example, in LASSO,</p>
 <p><span id="eq-lasso_beta"><span class="math display">\[
 \hat{\mathbf{\beta}} = \mathrm{arg}\min_\beta MSE(\beta; \xi^{tr})+\alpha\cdot||\beta||
 \tag{1}\]</span></span></p>
 <p>Here <span class="math inline">\(\xi^{tr}\)</span> denotes the training data. <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> denote the hyperparameter and the regression coefficients, respectively. Inspecting the definition, one can say <span class="math inline">\(\hat{\beta} = \hat{\beta}(\alpha, \xi^{tr})\)</span>.</p>
 <p>If <span class="math inline">\(\alpha\)</span> is also determined by the training set, <span class="math inline">\(\hat{\beta}\)</span> reduces into <span class="math inline">\(\hat{\beta}(\alpha(\xi^{tr}), \xi^{tr}) = \hat{\beta}(\xi^{tr})\)</span>. (i.e., The parameters are entirely a function of the training set). Note that in the context of LASSO, this results the same coefficients to OLS as <span class="math inline">\(\alpha\)</span> would reduce to 0.</p>
-<p>Then, should we select hyperparameters based on test set(i.e., given a set of possible candidates, should we select one that best performs in the test set)? Such hyperparameters would overfit the test set; we want our hyperparameters to work well with unseen and new data.</p>
+<p>Then, should we select hyperparameters based on test set(i.e., given a set of possible candidates, should we select one that best performs in the test set)? Such hyperparameters would overfit the model to the test set; we want our hyperparameters to work well with unseen and new data.</p>
 <p>In the former example with LASSO,</p>
 <p><span class="math display">\[
 \hat{\mathbf{\beta}_\alpha}(\xi^{tr}) = \mathrm{arg}\min_\beta MSE(\beta; \xi^{tr})+\alpha\cdot||\beta||
 \]</span></p>
-<p>is a function of <span class="math inline">\(\xi^{tr}\)</span> and <span class="math inline">\(\alpha\)</span>. In contrast to <a href="#eq-lasso_beta" class="quarto-xref">Equation&nbsp;1</a>, I added the subscript <span class="math inline">\(\alpha\)</span>, because this is not our final choice of <span class="math inline">\(\hat{\beta}\)</span>; rather, it is the interim value of <span class="math inline">\(\hat{\beta}\)</span> given a specific value of <span class="math inline">\(\alpha\)</span>. The final choice of <span class="math inline">\(\hat{\beta}\)</span> would be among <span class="math inline">\(\{\hat{\beta_\alpha}: \alpha \in I_\alpha\}\)</span>.</p>
-<p>Behind <span class="math inline">\(\alpha\)</span> is the set of possible candidates, denoted by <span class="math inline">\(I_\alpha\)</span>, and the optimization in the test set, <span class="math inline">\(\xi^{te}\)</span>. Comparing all the <span class="math display">\[
+<p>is a function of <span class="math inline">\(\xi^{tr}\)</span> and <span class="math inline">\(\alpha\)</span>. In contrast to <a href="#eq-lasso_beta" class="quarto-xref">Equation&nbsp;1</a>, I added the subscript <span class="math inline">\(\alpha\)</span>, because this is not our final choice of <span class="math inline">\(\hat{\beta}\)</span>; rather, it is the interim value of <span class="math inline">\(\hat{\beta}\)</span> given a specific value of <span class="math inline">\(\alpha\)</span>. The final choice of <span class="math inline">\(\hat{\beta}\)</span> would be among <span class="math inline">\(\{\hat{\beta_\alpha}: \alpha \in I_\alpha\}\)</span>, whee <span class="math inline">\(I_\alpha\)</span> denotes the set of all <span class="math inline">\(\alpha\)</span>’s in consideration.</p>
+<p>Let <span class="math inline">\(\xi^{te}\)</span> denote the test set. Comparing all the <span class="math display">\[
 \hat{\alpha} = \mathrm{arg}\min_{\alpha\in I_\alpha} MSE(\hat{\beta_\alpha}(\xi^{tr}); \xi^{te})+\alpha\cdot||\hat{\beta_\alpha}||
 \]</span></p>
-<p>The resulting best <span class="math inline">\(\hat{\alpha}\)</span> is the function of <span class="math inline">\(\xi^{tr}, \xi^{te}\)</span>, and the set <span class="math inline">\(I_\alpha\)</span>, and our choice of <span class="math inline">\(\hat{\beta}\)</span> would be <span class="math inline">\(\hat{\beta_\hat{\alpha}}\)</span>.</p>
-<p>This leads to an overfitting to the test set, because the test set determines both <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span>.</p>
-<p>Now, consider k-fold cross validation. All splits assign different folds the role of a test set. Let <span class="math inline">\(S_i(i=1,2,...,k)\)</span> denote the split where the <span class="math inline">\(i\)</span>-th fold takes the role of a test set. In <span class="math inline">\(S_i\)</span>, let <span class="math inline">\(\xi^i\)</span> and <span class="math inline">\(\xi^{-i}\)</span> denote the test fold and training folds of that split.</p>
-<p>TBU</p>
+<p>The resulting best <span class="math inline">\(\hat{\alpha}\)</span> is the function of <span class="math inline">\(\xi^{tr}, \xi^{te}\)</span>, and <span class="math inline">\(I_\alpha\)</span>, and our choice of <span class="math inline">\(\hat{\beta}\)</span> would be <span class="math inline">\(\hat{\beta_\hat{\alpha}}\)</span>.</p>
+<p>This leads to overfitting the model to the test set, because the test set determines both <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span>.</p>
+<p>Now, consider k-fold cross validation. All splits assign the role of a test set to different folds. Let <span class="math inline">\(S_i(i=1,2,...,k)\)</span> denote the split where the <span class="math inline">\(i\)</span>-th fold takes the role of a test set. Let <span class="math inline">\(\xi^i\)</span> and <span class="math inline">\(\xi^{-i}\)</span> denote the test fold and training folds of the split, <span class="math inline">\(S_i\)</span>. Just for clarity, I want to add one more notation, <span class="math inline">\(\Xi(k)\)</span>, which denotes the splitting scheme. Note that although the number <span class="math inline">\(k\)</span> is determined by the researcher, the splitting scheme <span class="math inline">\(\Xi(k)\)</span> is determined randomly.</p>
+<p>Suppose now, we want to minimize the MSE from all the <span class="math inline">\(k\)</span> folds with respect to <span class="math inline">\(\alpha\)</span>.</p>
+<p><span class="math display">\[
+\hat{\alpha} = \mathrm{arg}\min_{\alpha\in I_\alpha} \sum_{i=1}^k\left(MSE(\hat{\beta_\alpha}(\xi^{-i}); \xi^{i})+\alpha\cdot||\hat{\beta_\alpha}||\right)
+\]</span> Then, <span class="math inline">\(\hat{\alpha}\)</span> is a function of <span class="math inline">\(I_\alpha\)</span>, <span class="math inline">\(\Xi(k)\)</span> and <span class="math inline">\(k\)</span>. Now, although <span class="math inline">\(\hat{\alpha}\)</span> and the corresponding <span class="math inline">\(\hat{\beta}_\hat{\alpha}\)</span> are determined to fit the sample data well, they do not fit the model to a specific subset of the sample data. Instead, roughly speaking, they fit it to the splitting scheme <span class="math inline">\(\Xi(k)\)</span>, which is determined randomly. This is why cross validations are often necessary for comparing different models and hyperparameters.</p>
 </section>
 <section id="grid-search-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="grid-search-cross-validation">Grid Search cross-validation</h3>
 <p><code>GridSearchCV</code> method from the <code>sklearn.model_selection</code> module creates a grid of possible hyperparameter values. In detail, there could be more than one hyperparameters for a prediction model. - You can choose both the number of neighbors and a metric(Euclidean or L1) in the case of KNN. - <code>GridSearchCV</code> searches through all the user-suggested values of those user-chosen set of hyperparameters.</p>
-<div id="5eec5462" class="cell" data-message="false" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, GridSearchCV</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {<span class="st">'n_neighbors'</span>: <span class="bu">range</span>(<span class="dv">2</span>,<span class="dv">20</span>,<span class="dv">2</span>), <span class="st">'metric'</span>: [<span class="st">"minkowski"</span>, <span class="st">"cityblock"</span>]} <span class="co"># Note: Minkowski metric is virtually Euclidean in our case.</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>knn_cv <span class="op">=</span> GridSearchCV(knn, param_grid, cv <span class="op">=</span> kf)</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>knn_cv.fit(X_train, y_train)</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(knn_cv.best_params_, knn_cv.best_score_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a6822f93" class="cell" data-message="false" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, GridSearchCV</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {<span class="st">'n_neighbors'</span>: <span class="bu">range</span>(<span class="dv">2</span>,<span class="dv">20</span>,<span class="dv">2</span>), <span class="st">'metric'</span>: [<span class="st">"minkowski"</span>, <span class="st">"cityblock"</span>]} <span class="co"># Note: Minkowski metric is virtually Euclidean in our case.</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>knn_cv <span class="op">=</span> GridSearchCV(knn, param_grid, cv <span class="op">=</span> kf)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>knn_cv.fit(X_train, y_train)</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(knn_cv.best_params_, knn_cv.best_score_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'metric': 'minkowski', 'n_neighbors': 4} 0.7916363636363637</code></pre>
 </div>
@@ -1113,17 +1230,17 @@ TN
 <section id="randomized-search-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="randomized-search-cross-validation">Randomized Search cross-validation</h3>
 <p><code>GridSearchCV</code> is indeed a very complete way for searching the best set of parameters, given a user-defined range to search for. However, this often results in unnecessarily many trials. That is, <code>GridSearchCV</code> goes through the combination of all the folds and the possible parameters values, and that is way too much sometimes. <code>RandomizedSearchCV</code> goes through a random set of parameter values, rather than exhausting all the candidates. <code>RandomizedSearchCV</code> requires one more argument than <code>GridSearchCV</code>: <code>n_iter</code>. <code>n_iter</code> is the number of possible hyperparameter sets to be tested. More <code>n_iter</code> leads to a finer quality at the cost of runtime.</p>
-<div id="5b0e733f" class="cell" data-message="false" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, RandomizedSearchCV</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {<span class="st">'n_neighbors'</span>: <span class="bu">range</span>(<span class="dv">2</span>,<span class="dv">20</span>,<span class="dv">2</span>), <span class="st">'metric'</span>: [<span class="st">"minkowski"</span>, <span class="st">"cityblock"</span>]} </span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>knn_cv <span class="op">=</span> RandomizedSearchCV(knn, param_grid, cv <span class="op">=</span> kf, n_iter<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>knn_cv.fit(X_train, y_train)</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(knn_cv.best_params_, knn_cv.best_score_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="174b87f2" class="cell" data-message="false" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, RandomizedSearchCV</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {<span class="st">'n_neighbors'</span>: <span class="bu">range</span>(<span class="dv">2</span>,<span class="dv">20</span>,<span class="dv">2</span>), <span class="st">'metric'</span>: [<span class="st">"minkowski"</span>, <span class="st">"cityblock"</span>]} </span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>knn_cv <span class="op">=</span> RandomizedSearchCV(knn, param_grid, cv <span class="op">=</span> kf, n_iter<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>knn_cv.fit(X_train, y_train)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(knn_cv.best_params_, knn_cv.best_score_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'n_neighbors': 4, 'metric': 'minkowski'} 0.7916363636363637</code></pre>
 </div>
@@ -1139,16 +1256,16 @@ TN
 <p>TBU</p>
 <section id="handling-missing-data" class="level3">
 <h3 class="anchored" data-anchor-id="handling-missing-data">Handling Missing Data</h3>
-<div id="4f15bf7d" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with sample mean</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>imp_mean <span class="op">=</span> SimpleImputer()</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> imp_mode.transform(X_train)</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with mode</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>imp_mode <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">"most_frequent"</span>)</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> imp_mode.transform(X_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d7647e8b" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with sample mean</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>imp_mean <span class="op">=</span> SimpleImputer()</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> imp_mode.transform(X_train)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with mode</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>imp_mode <span class="op">=</span> SimpleImputer(strategy<span class="op">=</span><span class="st">"most_frequent"</span>)</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> imp_mode.transform(X_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -1159,55 +1276,59 @@ TN
 <h3 class="anchored" data-anchor-id="sec-knn_algorithm">A.1. KNN Algorithm</h3>
 <p>TBU</p>
 </section>
-<section id="a.2.-lasso-vs-ols" class="level3">
-<h3 class="anchored" data-anchor-id="a.2.-lasso-vs-ols">A.2. LASSO vs OLS</h3>
+<section id="sec-rpart" class="level3">
+<h3 class="anchored" data-anchor-id="sec-rpart">A.2. Recursive Partitioning</h3>
+<p>At each node(except for the terminal node), a tree first chooses one covariate and the cutoff that would most help the children nodes predict the outcome variable. This is the concept of recursive partitioning. At each node, the model recursively selects a covariate and a cutoff to explain the outcome’s variance. Specifically, it aims to maximize the <strong>information gain(IG)</strong> from the split. TBU</p>
+</section>
+<section id="a.3.-lasso-vs-ols" class="level3">
+<h3 class="anchored" data-anchor-id="a.3.-lasso-vs-ols">A.3. LASSO vs OLS</h3>
 <p>LASSO shrinks the number of predictor variables used to explain the target. But after removing the bad predictors, <em>wouldn’t OLS with the remaining features be a better prediction than LASSO estimates?</em></p>
 <p><br></p>
 <p><em>The answer is</em> <strong><em>no.</em></strong> LASSO reduces the variance of the model at the cost of the model’s bias, whereas OLS, even with only the remaining features,increases variance and reduces bias.</p>
-<div id="33ab3ad9" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LassoCV, LinearRegression</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co"># A simulation with higher dimensionality (p &gt; n) and multiple runs</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>n_samples, n_features <span class="op">=</span> <span class="dv">50</span>, <span class="dv">200</span>  <span class="co"># Higher dimensionality (p &gt; n)</span></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>n_simulations <span class="op">=</span> <span class="dv">100</span>  <span class="co"># Number of simulations</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>mse_lasso_list <span class="op">=</span> []</span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>mse_ols_list <span class="op">=</span> []</span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_simulations):</span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.random.randn(n_samples, n_features)</span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    true_coef <span class="op">=</span> np.zeros(n_features)</span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>    true_coef[:<span class="dv">10</span>] <span class="op">=</span> np.random.uniform(<span class="dv">5</span>, <span class="dv">10</span>, size<span class="op">=</span><span class="dv">10</span>)  <span class="co"># Sparse true coefficients</span></span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> X <span class="op">@</span> true_coef <span class="op">+</span> np.random.randn(n_samples) <span class="op">*</span> <span class="dv">5</span></span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="va">None</span>)</span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>    lasso <span class="op">=</span> LassoCV(cv<span class="op">=</span><span class="dv">5</span>).fit(X_train, y_train)</span>
-<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    selected_features <span class="op">=</span> np.where(lasso.coef_ <span class="op">!=</span> <span class="dv">0</span>)[<span class="dv">0</span>]</span>
-<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>    ols <span class="op">=</span> LinearRegression()</span>
-<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(selected_features) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>        ols.fit(X_train[:, selected_features], y_train)</span>
-<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>        y_pred_ols <span class="op">=</span> ols.predict(X_test[:, selected_features])</span>
-<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>        mse_ols_list.append(mean_squared_error(y_test, y_pred_ols))</span>
-<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a>        mse_ols_list.append(np.nan)  <span class="co"># Handle case where LASSO selects no features</span></span>
-<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>    y_pred_lasso <span class="op">=</span> lasso.predict(X_test)</span>
-<span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a>    mse_lasso_list.append(mean_squared_error(y_test, y_pred_lasso))</span>
-<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a>mean_mse_lasso <span class="op">=</span> np.nanmean(mse_lasso_list)</span>
-<span id="cb41-37"><a href="#cb41-37" aria-hidden="true" tabindex="-1"></a>mean_mse_ols <span class="op">=</span> np.nanmean(mse_ols_list)</span>
-<span id="cb41-38"><a href="#cb41-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-39"><a href="#cb41-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of LASSO: '</span>, mean_mse_lasso)</span>
-<span id="cb41-40"><a href="#cb41-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of OLS: '</span>, mean_mse_ols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b061085a" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LassoCV, LinearRegression</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="co"># A simulation with higher dimensionality (p &gt; n) and multiple runs</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>n_samples, n_features <span class="op">=</span> <span class="dv">50</span>, <span class="dv">200</span>  <span class="co"># Higher dimensionality (p &gt; n)</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>n_simulations <span class="op">=</span> <span class="dv">100</span>  <span class="co"># Number of simulations</span></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>mse_lasso_list <span class="op">=</span> []</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>mse_ols_list <span class="op">=</span> []</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_simulations):</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.random.randn(n_samples, n_features)</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>    true_coef <span class="op">=</span> np.zeros(n_features)</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>    true_coef[:<span class="dv">10</span>] <span class="op">=</span> np.random.uniform(<span class="dv">5</span>, <span class="dv">10</span>, size<span class="op">=</span><span class="dv">10</span>)  <span class="co"># Sparse true coefficients</span></span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> X <span class="op">@</span> true_coef <span class="op">+</span> np.random.randn(n_samples) <span class="op">*</span> <span class="dv">5</span></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>    X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>    lasso <span class="op">=</span> LassoCV(cv<span class="op">=</span><span class="dv">5</span>).fit(X_train, y_train)</span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>    selected_features <span class="op">=</span> np.where(lasso.coef_ <span class="op">!=</span> <span class="dv">0</span>)[<span class="dv">0</span>]</span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>    ols <span class="op">=</span> LinearRegression()</span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(selected_features) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>        ols.fit(X_train[:, selected_features], y_train)</span>
+<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>        y_pred_ols <span class="op">=</span> ols.predict(X_test[:, selected_features])</span>
+<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a>        mse_ols_list.append(mean_squared_error(y_test, y_pred_ols))</span>
+<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb46-31"><a href="#cb46-31" aria-hidden="true" tabindex="-1"></a>        mse_ols_list.append(np.nan)  <span class="co"># Handle case where LASSO selects no features</span></span>
+<span id="cb46-32"><a href="#cb46-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb46-33"><a href="#cb46-33" aria-hidden="true" tabindex="-1"></a>    y_pred_lasso <span class="op">=</span> lasso.predict(X_test)</span>
+<span id="cb46-34"><a href="#cb46-34" aria-hidden="true" tabindex="-1"></a>    mse_lasso_list.append(mean_squared_error(y_test, y_pred_lasso))</span>
+<span id="cb46-35"><a href="#cb46-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-36"><a href="#cb46-36" aria-hidden="true" tabindex="-1"></a>mean_mse_lasso <span class="op">=</span> np.nanmean(mse_lasso_list)</span>
+<span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a>mean_mse_ols <span class="op">=</span> np.nanmean(mse_ols_list)</span>
+<span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of LASSO: '</span>, mean_mse_lasso)</span>
+<span id="cb46-40"><a href="#cb46-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of OLS: '</span>, mean_mse_ols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Average MSE of LASSO:  436.30426829935874
-Average MSE of OLS:  430.18356533772584</code></pre>
+<pre><code>Average MSE of LASSO:  462.04371469843966
+Average MSE of OLS:  492.2998349000015</code></pre>
 </div>
 </div>
 </section>
@@ -1215,7 +1336,7 @@ Average MSE of OLS:  430.18356533772584</code></pre>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
 <ul>
-<li>(KOR) Seunghwan Oh(오승환), 2019, Python Machine Learning Pandas Data Analysis(파이썬 머신러닝 판다스 데이터분석), 정보문화사</li>
+<li>(KOR) Seunghwan Oh(����ȯ), 2019, Python Machine Learning Pandas Data Analysis(���̽� �ӽŷ��� �Ǵٽ� �����ͺм�), ������ȭ��</li>
 </ul>
 </section>
 
@@ -1303,8 +1424,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1415,7 +1534,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
