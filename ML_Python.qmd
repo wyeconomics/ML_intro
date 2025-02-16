@@ -266,7 +266,7 @@ plt.show()
 
 <br>
 
-### Tree-based Models(Decision Tree and Random Forests)
+### Tree-based Models(Decision Tree and Random Forests){#sec-tree}
 
 #### Decision Trees
 Trees are methods applicable to both classification and prediction problems. In such sense, they're often called CART(Classification and Regression Tree). Here, we focus on decision trees, which classify the labels of data. Decision trees are based on a mechanism often called **recursive partitioning**. For details of recursive partitioning, please check [A.2.](/#sec-rpart)
@@ -874,7 +874,57 @@ TBU
 TBU
 
 ### A.2. Recursive Partitioning{#sec-rpart}
-At each node(except for the terminal node), a tree first chooses one covariate and the cutoff that would most help the children nodes predict the outcome variable. This is the concept of recursive partitioning. At each node, the model recursively selects a covariate and a cutoff to explain the outcome's variance. Specifically, it aims to maximize the **information gain(IG)** from the split. TBU
+In this section, I elaborate on how the tree-based models split the covariate space recursively. At each node(except for the terminal node), a tree first chooses one covariate and the cutoff that would most help the children nodes predict the outcome variable. This is the concept of recursive partitioning. At each node, the model recursively selects a covariate(i.e., feature) and a cutoff(i.e., split-point) to explain the outcome's variance(or heterogeneity). However, the measure of how well the outcome heterogeneity is explained depends on whether the outcome is continuous or categorical. That is,
+
+| Tree Type | Target Variable | Split Criterion |
+|:----------|:----------|:----------|
+| Regression Trees    |   Continuous | minimize RSS, MSE |
+| Classification Trees  | Categorical | maximize IG |
+
+For regression trees, the aim of recursive partitioning is to choose a covariate and a split-point that would minimize the RSS(residual sum of squares). In other words, we minimize
+
+$$
+\sum_{i: x_i \in L(j,s)}(y_i-\overline{y}_L)^2 + \sum_{i: x_i \in R(j,s)}(y_i-\overline{y}_R)^2
+$$
+
+where 
+
+$$
+L(j,s) = \{X|X_j < s\} \\
+R(j,s) = \{X|X_j \geq s\}
+$$
+and $\overline{y}_L, \overline{y}_R$ denote the mean outcome for the training observations in each region.
+
+For classification trees, the partitioning aims to maximize the **information gain(IG)** from the split:
+
+$$
+IG(f, s) = Imp(parent) - \left(\frac{N_{L}}{N}Imp(L) +\frac{N_{R}}{N}Imp(R) \right)
+$$
+where
+
+- $IG$ : information gain
+- $Imp$ : impurity index
+- $N, N_{L}, N_{R}$ : Number of obs. in the parent ntode, left child node, right child node
+
+Here, $Imp()$ stands for the impurity of a specific node,  and thus information gain represents the purity gained from splitting the node into two. Intuitively, we can think of the impurity as a measure of how mixed the labels(i.e., outcome variables) are at a certain node. Thus, a property that the impurity measure should have is to have a low value when the node fully consists of one label value, and have a high value if the node consists of multiple label values.
+
+There are multiple ways to measure the impurity:
+
+- **Gini Index**: $G(m) = \sum_{k=1}^K \overline{p}_{mk}(1-\overline{p}_{mk})$ 
+- **Entropy**: $D(m)= -\sum_{k=1}^K\overline{p}_{mk}\log \overline{p}_{mk}$
+
+where $m$ denotes the node.
+
+At a glance, you can see that both gini and entropy goes to zero when each $\overline{p}_{mk}$ goes close to either zero or one. Note that $\sum_{k=1}^K\overline{p}_{mk}=1$, and solving the "maximization" under linear constraints would demonstrate that $\overline{p}_{mk}=\frac{1}{K}$ mazimizes the impurity for both measures. These two measures are widely used in the context of ML, so it is good to know before we start making our trees and forests:)
+
+
+#### Some Remarks for Econ Students
+Notice that in the gini index, since $\sum_{k=1}^K\overline{p}_{mk}=1$,
+
+$$
+G(m) = \sum_{k=1}^K \overline{p}_{mk}(1-\overline{p}_{mk})=1-\sum_{k=1}^K\overline{p}_{mk}^2
+$$
+which very much resembles the **Herfindahl-Hirschman Index (HHI)** in Industrial Organzation(an index for measuring the concentration of market share). Obviously, different disciplines sometimes rely on similar approaches.
 
 ### A.3. LASSO vs OLS
 LASSO shrinks the number of predictor variables used to explain the target. But after removing the bad predictors, *wouldn't OLS with the remaining features be a better prediction than LASSO estimates?*
@@ -931,4 +981,5 @@ print('Average MSE of OLS: ', mean_mse_ols)
 ```
 
 ## References
-- (KOR) Seunghwan Oh(¿À½ÂÈ¯), 2019, Python Machine Learning Pandas Data Analysis(ÆÄÀÌ½ã ¸Ó½Å·¯´× ÆÇ´Ù½º µ¥ÀÌÅÍºÐ¼®), Á¤º¸¹®È­»ç
+- (KOR) Seunghwan Oh(?À½?È¯). (2019). Python Machine Learning Pandas Data Analysis(???Ì½? ?Ó½Å·??? ?Ç´Ù½? ?????ÍºÐ¼?). Á¤????È­??
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). An introduction to statistical learning (1st ed.) [PDF]. Springer.

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Wooyong Park">
-<meta name="dcterms.date" content="2025-02-14">
+<meta name="dcterms.date" content="2025-02-16">
 
 <title>Machine Learning with Python</title>
 <style>
@@ -121,7 +121,7 @@ window.Quarto = {
   <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification">Classification</a>
   <ul class="collapse">
   <li><a href="#k-nearest-neighborsknn" id="toc-k-nearest-neighborsknn" class="nav-link" data-scroll-target="#k-nearest-neighborsknn">k-Nearest Neighbors(KNN)</a></li>
-  <li><a href="#tree-based-modelsdecision-tree-and-random-forests" id="toc-tree-based-modelsdecision-tree-and-random-forests" class="nav-link" data-scroll-target="#tree-based-modelsdecision-tree-and-random-forests">Tree-based Models(Decision Tree and Random Forests)</a></li>
+  <li><a href="#sec-tree" id="toc-sec-tree" class="nav-link" data-scroll-target="#sec-tree">Tree-based Models(Decision Tree and Random Forests)</a></li>
   <li><a href="#logistic-regressions" id="toc-logistic-regressions" class="nav-link" data-scroll-target="#logistic-regressions">Logistic Regressions</a></li>
   </ul></li>
   <li><a href="#predictions" id="toc-predictions" class="nav-link" data-scroll-target="#predictions">Predictions</a>
@@ -184,7 +184,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 14, 2025</p>
+      <p class="date">February 16, 2025</p>
     </div>
   </div>
   
@@ -231,7 +231,7 @@ window.Quarto = {
 <p>Supervised learning is classified as prediction or classification, according to whether the “target variable” is continuous or discrete. We aim to predict/classify the target variable’s value based on the values of “predictor variables”.</p>
 <section id="example-workflow" class="level3">
 <h3 class="anchored" data-anchor-id="example-workflow">Example Workflow</h3>
-<div id="5feeac9d" class="cell" data-execution_count="1">
+<div id="074bce09" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.module <span class="im">import</span> Model   <span class="co">#import the type of algorithm</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Model() <span class="co">#instantiate the model</span></span>
@@ -247,7 +247,7 @@ window.Quarto = {
 <section id="k-nearest-neighborsknn" class="level3">
 <h3 class="anchored" data-anchor-id="k-nearest-neighborsknn">k-Nearest Neighbors(KNN)</h3>
 <p><strong>k-Nearest Neighbors</strong>, more often called as <strong>KNN</strong> predicts the label by looking at the <code>k</code> closest labelled data points, and take the majority value of label as the observation’s label value.</p>
-<div id="4bd00def" class="cell" data-execution_count="2">
+<div id="c396b851" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -257,7 +257,7 @@ window.Quarto = {
 </div>
 </div>
 <p>The natural question following would be “How should I choose the right <code>k</code>?” A smaller <code>k</code> would mean that individual data gains more power in the classification, which would turn more complex models and overfitting. Likewise, if <code>k</code> is too large, it would give too simple models and cause underfitting. Hence, the question also faces the <strong>bias-variance tradeoff</strong> and researchers should be careful not to arrive at both extremes. For a theoretical background for KNN, please go to <a href="./#sec-knn_algorithm">A.1.</a></p>
-<div id="607ae60b" class="cell" data-execution_count="3">
+<div id="b6dbb841" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -267,7 +267,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Let’s begin practicing <strong>KNN</strong> with the following example workflow. In this workflow, we will use the <code>titanic</code> data from the <code>seaborn</code> package and predict whether a person survived or not with the predictor variables <code>pclass</code>, <code>sex</code>, <code>age</code>, <code>sibsp</code>, <code>parch</code>, and <code>embarked</code>. First, load the dataset.</p>
-<div id="f948dc19" class="cell" data-execution_count="4">
+<div id="5db7636a" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
@@ -292,7 +292,7 @@ window.Quarto = {
 <section id="getting-ready" class="level4">
 <h4 class="anchored" data-anchor-id="getting-ready">(1) Getting Ready</h4>
 <p>Then, we choose the variables to use in the classification, drop or replace <code>NA</code> values, and further process the data to get things ready.</p>
-<div id="e08878a0" class="cell" data-execution_count="5">
+<div id="c233f190" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[[<span class="st">'survived'</span>, <span class="st">'pclass'</span>, <span class="st">'sex'</span>, <span class="st">'age'</span>, <span class="st">'sibsp'</span>, <span class="st">'parch'</span>, <span class="st">'embarked'</span>]]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropping obs with NAs in age</span></span>
@@ -323,7 +323,7 @@ window.Quarto = {
 [714 rows x 7 columns]</code></pre>
 </div>
 </div>
-<div id="6057ee12" class="cell" data-execution_count="6">
+<div id="f121fe74" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating dummies for sex and embarked (one-hot-encoding)</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
@@ -372,7 +372,7 @@ window.Quarto = {
 <section id="normalization-and-splitting-data" class="level4">
 <h4 class="anchored" data-anchor-id="normalization-and-splitting-data">(2) Normalization and Splitting data</h4>
 <p>One of the most important factors in distance-based algorithms(KNN, K-Means, etc.) and gradient-based algorithms(logistic regression, neural networks) is the <strong><em>normalization</em></strong> of predictor values. This is because input values with larger scales could have a larger effect on calculating the distance between observations. To eliminate such concern, normalization is necessary. In <code>sci-kit learn</code>, we do this with the <code>preprocessing</code> module.</p>
-<div id="429c76a8" class="cell" data-execution_count="7">
+<div id="e8986259" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Before:'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span>
@@ -428,7 +428,7 @@ After:
 <p>In the code above, <code>preprocessing.StandardScaler()</code> instantiates a scaling process, and the first method, <code>fit(X)</code>, receives <code>X</code> and returns the sample mean and the sample variance of each column. Then, the second method, <code>transform(X)</code> returns the rescaled (transformed) X values according to the values from <code>fit(X)</code>. We replace the original <code>X</code> with this new instantiation of the scaler.</p>
 <p><br></p>
 <p>Finally, the last stage of preprocessing data is to split the data into a training set and a test set. Here, we split them in a 7:3 ratio. Also, we often want the <code>y</code> values to occur symmetrically for the training and test sets. To do this, we add the optional argument <code>stratify=y</code>.</p>
-<div id="1158a131" class="cell" data-execution_count="8">
+<div id="f799af00" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">10</span>, stratify <span class="op">=</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -437,7 +437,7 @@ After:
 </section>
 <section id="training-and-testing" class="level4">
 <h4 class="anchored" data-anchor-id="training-and-testing">(3) Training and Testing</h4>
-<div id="59096af4" class="cell" data-message="false" data-execution_count="9">
+<div id="63828026" class="cell" data-message="false" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiating KNN</span></span>
@@ -462,7 +462,7 @@ After:
 <h4 class="anchored" data-anchor-id="model-performance">(4) Model Performance</h4>
 <p>After train/test process is done, we summarize the model performance with confusion matrix and the classification report.</p>
 <p>For detailed explanation of measuring model performances in supervised learning, go to <a href="#sec-model_performance" class="quarto-xref">Section&nbsp;5</a>.</p>
-<div id="056c2b77" class="cell" data-execution_count="10">
+<div id="886ccf5f" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> metrics</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># confusion matrix</span></span>
@@ -537,8 +537,8 @@ Figure&nbsp;1: Model Complexity Curve
 <p><br></p>
 </section>
 </section>
-<section id="tree-based-modelsdecision-tree-and-random-forests" class="level3">
-<h3 class="anchored" data-anchor-id="tree-based-modelsdecision-tree-and-random-forests">Tree-based Models(Decision Tree and Random Forests)</h3>
+<section id="sec-tree" class="level3">
+<h3 class="anchored" data-anchor-id="sec-tree">Tree-based Models(Decision Tree and Random Forests)</h3>
 <section id="decision-trees" class="level4">
 <h4 class="anchored" data-anchor-id="decision-trees">Decision Trees</h4>
 <p>Trees are methods applicable to both classification and prediction problems. In such sense, they’re often called CART(Classification and Regression Tree). Here, we focus on decision trees, which classify the labels of data. Decision trees are based on a mechanism often called <strong>recursive partitioning</strong>. For details of recursive partitioning, please check <a href="./#sec-rpart">A.2.</a></p>
@@ -546,7 +546,7 @@ Figure&nbsp;1: Model Complexity Curve
 </section>
 <section id="getting-ready-1" class="level4">
 <h4 class="anchored" data-anchor-id="getting-ready-1">(1) Getting Ready</h4>
-<div id="d871853c" class="cell" data-execution_count="12">
+<div id="aa3fb6f3" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
@@ -585,7 +585,7 @@ Figure&nbsp;1: Model Complexity Curve
 </div>
 </div>
 <p>In contrast to <code>KNeighborsClassifier</code>, <code>DecisionTreeClassifier</code> does not require one-hot encoding and standardizing. However, it does require each string variable to be converted to integers using <code>label encoding</code>.</p>
-<div id="b2907b31" class="cell" data-execution_count="13">
+<div id="f9f4f4f4" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Automatically encode all object (categorical) columns</span></span>
@@ -624,7 +624,7 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="training-and-testing-1" class="level4">
 <h4 class="anchored" data-anchor-id="training-and-testing-1">(2) Training and Testing</h4>
 <p>Next, we split the data into a training set and a test set. After that we instantiate a <code>DecisionTreeClassifier</code> object, setting the maximum depth of a tree, <code>max_depth</code> to 2. <code>random_state</code> controls - sets the seed - any randomness that could happen in the decision-making process. Such randomness can happen when handling ties of multiple features, or when feature selection or bootstrap sampling is employed(We’ll discuss this later).</p>
-<div id="390b00de" class="cell" data-execution_count="14">
+<div id="e47003a7" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> plot_tree</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -655,7 +655,7 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="logistic-regressions" class="level3">
 <h3 class="anchored" data-anchor-id="logistic-regressions">Logistic Regressions</h3>
 <p>Logistic regressions are useful for classifying binary labels. We will do this with the same dataset, <code>titanic</code>, and classify whether passengers survived or not. The following code repeats the data preprocessing, normalization, and splitting process we had in the former examples.</p>
-<div id="3327a2ca" class="cell" data-message="false" data-execution_count="15">
+<div id="14c219ff" class="cell" data-message="false" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
@@ -694,7 +694,7 @@ Figure&nbsp;1: Model Complexity Curve
 <li><code>.predict_proba(X_test)</code> : predicted probability of each class(the probability threshold is 0.5)</li>
 <li><code>.predict_log_proba(X_test)</code> : predicted log-probability of each class</li>
 </ul>
-<div id="f1aee07b" class="cell" data-message="false" data-execution_count="16">
+<div id="8e75937a" class="cell" data-message="false" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>logreg <span class="op">=</span> LogisticRegression()</span>
@@ -707,7 +707,7 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="roc--auc" class="level4">
 <h4 class="anchored" data-anchor-id="roc--auc">(2) ROC- AUC</h4>
 <p>By default, probability threshold for logistic regressions in <code>scikit-learn</code> is 0.5. However, the right threshold could vary across cases. Thus, to obtain the right threshold, we could plot <span class="math inline">\(1-\mathrm{specificity}\)</span> (on the X-axis) and <span class="math inline">\(\mathrm{sensitivity}\)</span> (on the Y-axis), which is called the <strong>ROC curve(Receiver Operating Characteristics)</strong>.</p>
-<div id="048fbbea" class="cell" data-message="false" data-execution_count="17">
+<div id="be92ece2" class="cell" data-message="false" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -729,7 +729,7 @@ Figure&nbsp;1: Model Complexity Curve
 </div>
 </div>
 <p>ROC curve illustrates how the model performs on the test data. The more the shape of ROC curve looks like <span class="math inline">\(\Gamma\)</span>, the better. - we can find a threshold that attains larger sensitivity and specificity - Area under the curve, <strong>AUC</strong>, is the summarized value of such model performance. Its value range between 0 and 1, with 1 being ideal.</p>
-<div id="67176271" class="cell" data-message="false" data-execution_count="18">
+<div id="d4e6e64d" class="cell" data-message="false" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roc_auc_score(y_test, y_pred_probs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -743,13 +743,13 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="predictions" class="level2">
 <h2 class="anchored" data-anchor-id="predictions">Predictions</h2>
 <p>Prediction is simply running regressions and using the fitted values as the predicted values of outcome. The process of such practice is not much different from classifications. Let’s begin by loading the data.</p>
-<div id="2bc728da" class="cell" data-execution_count="19">
+<div id="1dacb59d" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">'penguins'</span>)</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="47">
+<div class="cell-output cell-output-display" data-execution_count="134">
 <div>
 
 
@@ -824,7 +824,7 @@ Figure&nbsp;1: Model Complexity Curve
 </div>
 </div>
 <p>With the <code>penguins</code> data from the <code>seaborn</code> package, we’d like to predict each penguin’s <code>body_mass_g</code> based on its <code>species</code>, <code>bill_length_mm</code>, <code>bill_depth_mm</code>, <code>flipper_length_mm</code>, and <code>sex</code>.</p>
-<div id="9402a893" class="cell" data-execution_count="20">
+<div id="b2272239" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna(subset <span class="op">=</span> [<span class="st">'sex'</span>, <span class="st">'body_mass_g'</span>], how <span class="op">=</span> <span class="st">'any'</span>, axis <span class="op">=</span> <span class="dv">0</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>onehot_sex <span class="op">=</span> pd.get_dummies(df[<span class="st">'sex'</span>])</span>
@@ -871,7 +871,7 @@ Figure&nbsp;1: Model Complexity Curve
 <section id="sec-univ_reg" class="level3">
 <h3 class="anchored" data-anchor-id="sec-univ_reg">Univariate Regression</h3>
 <p>A univariate regression, or more specifically a simple linear regression, regresses <code>y</code> on a single predictor variable <code>x</code>. Let’s consider a simple case of regressing <code>body_mass_g</code> on <code>flipper_length_mm</code>.</p>
-<div id="816dec51" class="cell" data-execution_count="21">
+<div id="c143a32d" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize <span class="op">=</span> (<span class="dv">9</span>,<span class="dv">5</span>))</span>
@@ -889,7 +889,7 @@ Figure&nbsp;1: Model Complexity Curve
 </div>
 </div>
 <p>In the code below, we will split the data into training set and test set(7:3), calculate the model performance with R-squared in the test set, and print out the linear coefficients.</p>
-<div id="98c373f0" class="cell" data-execution_count="22">
+<div id="ce1ad511" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -922,7 +922,7 @@ intercept:  [-5947.85540739]</code></pre>
 <section id="multinomial-regression-with-polynomialfeatures" class="level3">
 <h3 class="anchored" data-anchor-id="multinomial-regression-with-polynomialfeatures">Multinomial Regression with <code>PolynomialFeatures</code></h3>
 <p>Following the codes in <a href="#sec-univ_reg" class="quarto-xref">Section&nbsp;4.1</a>, we will introduce a quadratic and a cubic term of X to the regression.</p>
-<div id="4418eb3f" class="cell" data-execution_count="23">
+<div id="ed8c6255" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df[[<span class="st">'flipper_length_mm'</span>]]</span>
@@ -964,7 +964,7 @@ intercept:  [151056.40370382]</code></pre>
 </section>
 <section id="multivariate-regressions" class="level3">
 <h3 class="anchored" data-anchor-id="multivariate-regressions">Multivariate Regressions</h3>
-<div id="ad0731c6" class="cell" data-execution_count="24">
+<div id="2852f19a" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop([<span class="st">'body_mass_g'</span>, <span class="st">'island'</span>, <span class="st">'Male'</span>, <span class="st">'species_Gentoo'</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[[<span class="st">'body_mass_g'</span>]]</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1010,7 +1010,7 @@ intercept:  [-574.49999499]</code></pre>
 <li>Here, <span class="math inline">\(\alpha\)</span> is called a <em>hyperparameter</em>, a parameter that we choose to optimize the prediction.</li>
 <li>In the case of <span class="math inline">\(\alpha = 0\)</span>, ridge regrerssions would be equivalent to OLS.</li>
 </ul>
-<div id="160dc1f9" class="cell" data-execution_count="25">
+<div id="87756691" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Ridge</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># scores = [] #initiate an empty list to record R-squared</span></span>
@@ -1031,7 +1031,7 @@ intercept:  [-574.49999499]</code></pre>
 <li>In the case of <span class="math inline">\(\alpha = 0\)</span>, LASSO would be equivalent to OLS.</li>
 <li>LASSO shrinks the coefficients of less important features to zero</li>
 </ul>
-<div id="644f27e3" class="cell" data-execution_count="26">
+<div id="e342b00c" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.linear_model import Lasso</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># lasso = Lasso(alpha=0.1)</span></span>
@@ -1155,14 +1155,14 @@ TN
 <p>Loss function represents the amount of information loss incurred by using the predicted values rather than actual target values. The most common loss function is the mean squared error function(a.k.a. quadratic loss function), which is equal to the residual sum of squares divided by the number of observations.</p>
 <p><span class="math display">\[ MSE = \frac{1}{n}\sum_{i=1}^n(y_i-\hat{y}_i)^2 \]</span> <span class="math display">\[ RSS = \sum_{i=1}^n(y_i-\hat{y}_i)^2 \]</span></p>
 <p><code>mean_squared_error</code> function from <code>sklearn.metrics</code> calculates the MSE of a given model.</p>
-<div id="903f1134" class="cell" data-execution_count="27">
+<div id="12bd0119" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>mean_squared_error(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>R-squared(<span class="math inline">\(R^2\)</span>) quantifies the portion explained by the predictor variables of the variance of the target variable. The value ranges from 0 to 1, and a higher value implies that the predictor variables explain the target well.</p>
 <p><span class="math display">\[ R^2 = 1-\frac{RSS}{TSS}\]</span> <span class="math display">\[ TSS = \sum_{i=1}^n(y_i-\bar{y})^2\]</span></p>
 <p>It is calculated by the <code>score</code> method of a regression object.</p>
-<div id="19e810ab" class="cell" data-execution_count="28">
+<div id="8e8b6601" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>r_square <span class="op">=</span> reg.score(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1172,7 +1172,7 @@ TN
 <section id="cross-validation-and-hyperparameter-tuning" class="level2">
 <h2 class="anchored" data-anchor-id="cross-validation-and-hyperparameter-tuning">Cross Validation and Hyperparameter Tuning</h2>
 <p>Cross validating means dividing the sample into <span class="math inline">\(k\)</span> folds, and rotate the role of test data. In each of these splits and the corresponding test-fold, we obtain <span class="math inline">\(k\)</span> model performance metrics. Through cross validation, we can check whether these <span class="math inline">\(k\)</span> metrics are similar or having peculiarities, helping us generalize the model performance to unseen data.</p>
-<div id="3cdaa0d8" class="cell" data-execution_count="29">
+<div id="be7bf0d9" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score, KFold</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits <span class="op">=</span> <span class="dv">5</span>, shuffle <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>) <span class="co"># "shuffle = True" shuffles the data before splitting the data</span></span>
@@ -1211,7 +1211,7 @@ TN
 <section id="grid-search-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="grid-search-cross-validation">Grid Search cross-validation</h3>
 <p><code>GridSearchCV</code> method from the <code>sklearn.model_selection</code> module creates a grid of possible hyperparameter values. In detail, there could be more than one hyperparameters for a prediction model. - You can choose both the number of neighbors and a metric(Euclidean or L1) in the case of KNN. - <code>GridSearchCV</code> searches through all the user-suggested values of those user-chosen set of hyperparameters.</p>
-<div id="a6822f93" class="cell" data-message="false" data-execution_count="31">
+<div id="d709d6c6" class="cell" data-message="false" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, GridSearchCV</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1230,7 +1230,7 @@ TN
 <section id="randomized-search-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="randomized-search-cross-validation">Randomized Search cross-validation</h3>
 <p><code>GridSearchCV</code> is indeed a very complete way for searching the best set of parameters, given a user-defined range to search for. However, this often results in unnecessarily many trials. That is, <code>GridSearchCV</code> goes through the combination of all the folds and the possible parameters values, and that is way too much sometimes. <code>RandomizedSearchCV</code> goes through a random set of parameter values, rather than exhausting all the candidates. <code>RandomizedSearchCV</code> requires one more argument than <code>GridSearchCV</code>: <code>n_iter</code>. <code>n_iter</code> is the number of possible hyperparameter sets to be tested. More <code>n_iter</code> leads to a finer quality at the cost of runtime.</p>
-<div id="174b87f2" class="cell" data-message="false" data-execution_count="32">
+<div id="68289e0c" class="cell" data-message="false" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> KFold, RandomizedSearchCV</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1256,7 +1256,7 @@ TN
 <p>TBU</p>
 <section id="handling-missing-data" class="level3">
 <h3 class="anchored" data-anchor-id="handling-missing-data">Handling Missing Data</h3>
-<div id="d7647e8b" class="cell" data-execution_count="33">
+<div id="25850084" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation with sample mean</span></span>
@@ -1278,14 +1278,68 @@ TN
 </section>
 <section id="sec-rpart" class="level3">
 <h3 class="anchored" data-anchor-id="sec-rpart">A.2. Recursive Partitioning</h3>
-<p>At each node(except for the terminal node), a tree first chooses one covariate and the cutoff that would most help the children nodes predict the outcome variable. This is the concept of recursive partitioning. At each node, the model recursively selects a covariate and a cutoff to explain the outcome’s variance. Specifically, it aims to maximize the <strong>information gain(IG)</strong> from the split. TBU</p>
+<p>In this section, I elaborate on how the tree-based models split the covariate space recursively. At each node(except for the terminal node), a tree first chooses one covariate and the cutoff that would most help the children nodes predict the outcome variable. This is the concept of recursive partitioning. At each node, the model recursively selects a covariate(i.e., feature) and a cutoff(i.e., split-point) to explain the outcome’s variance(or heterogeneity). However, the measure of how well the outcome heterogeneity is explained depends on whether the outcome is continuous or categorical. That is,</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tree Type</th>
+<th style="text-align: left;">Target Variable</th>
+<th style="text-align: left;">Split Criterion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Regression Trees</td>
+<td style="text-align: left;">Continuous</td>
+<td style="text-align: left;">minimize RSS, MSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Classification Trees</td>
+<td style="text-align: left;">Categorical</td>
+<td style="text-align: left;">maximize IG</td>
+</tr>
+</tbody>
+</table>
+<p>For regression trees, the aim of recursive partitioning is to choose a covariate and a split-point that would minimize the RSS(residual sum of squares). In other words, we minimize</p>
+<p><span class="math display">\[
+\sum_{i: x_i \in L(j,s)}(y_i-\overline{y}_L)^2 + \sum_{i: x_i \in R(j,s)}(y_i-\overline{y}_R)^2
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+L(j,s) = \{X|X_j &lt; s\} \\
+R(j,s) = \{X|X_j \geq s\}
+\]</span> and <span class="math inline">\(\overline{y}_L, \overline{y}_R\)</span> denote the mean outcome for the training observations in each region.</p>
+<p>For classification trees, the partitioning aims to maximize the <strong>information gain(IG)</strong> from the split:</p>
+<p><span class="math display">\[
+IG(f, s) = Imp(parent) - \left(\frac{N_{L}}{N}Imp(L) +\frac{N_{R}}{N}Imp(R) \right)
+\]</span> where</p>
+<ul>
+<li><span class="math inline">\(IG\)</span> : information gain</li>
+<li><span class="math inline">\(Imp\)</span> : impurity index</li>
+<li><span class="math inline">\(N, N_{L}, N_{R}\)</span> : Number of obs. in the parent ntode, left child node, right child node</li>
+</ul>
+<p>Here, <span class="math inline">\(Imp()\)</span> stands for the impurity of a specific node, and thus information gain represents the purity gained from splitting the node into two. Intuitively, we can think of the impurity as a measure of how mixed the labels(i.e., outcome variables) are at a certain node. Thus, a property that the impurity measure should have is to have a low value when the node fully consists of one label value, and have a high value if the node consists of multiple label values.</p>
+<p>There are multiple ways to measure the impurity:</p>
+<ul>
+<li><strong>Gini Index</strong>: <span class="math inline">\(G(m) = \sum_{k=1}^K \overline{p}_{mk}(1-\overline{p}_{mk})\)</span></li>
+<li><strong>Entropy</strong>: <span class="math inline">\(D(m)= -\sum_{k=1}^K\overline{p}_{mk}\log \overline{p}_{mk}\)</span></li>
+</ul>
+<p>where <span class="math inline">\(m\)</span> denotes the node.</p>
+<p>At a glance, you can see that both gini and entropy goes to zero when each <span class="math inline">\(\overline{p}_{mk}\)</span> goes close to either zero or one. Note that <span class="math inline">\(\sum_{k=1}^K\overline{p}_{mk}=1\)</span>, and solving the “maximization” under linear constraints would demonstrate that <span class="math inline">\(\overline{p}_{mk}=\frac{1}{K}\)</span> mazimizes the impurity for both measures. These two measures are widely used in the context of ML, so it is good to know before we start making our trees and forests:)</p>
+<section id="some-remarks-for-econ-students" class="level4">
+<h4 class="anchored" data-anchor-id="some-remarks-for-econ-students">Some Remarks for Econ Students</h4>
+<p>Notice that in the gini index, since <span class="math inline">\(\sum_{k=1}^K\overline{p}_{mk}=1\)</span>,</p>
+<p><span class="math display">\[
+G(m) = \sum_{k=1}^K \overline{p}_{mk}(1-\overline{p}_{mk})=1-\sum_{k=1}^K\overline{p}_{mk}^2
+\]</span> which very much resembles the <strong>Herfindahl-Hirschman Index (HHI)</strong> in Industrial Organzation(an index for measuring the concentration of market share). Obviously, different disciplines sometimes rely on similar approaches.</p>
+</section>
 </section>
 <section id="a.3.-lasso-vs-ols" class="level3">
 <h3 class="anchored" data-anchor-id="a.3.-lasso-vs-ols">A.3. LASSO vs OLS</h3>
 <p>LASSO shrinks the number of predictor variables used to explain the target. But after removing the bad predictors, <em>wouldn’t OLS with the remaining features be a better prediction than LASSO estimates?</em></p>
 <p><br></p>
 <p><em>The answer is</em> <strong><em>no.</em></strong> LASSO reduces the variance of the model at the cost of the model’s bias, whereas OLS, even with only the remaining features,increases variance and reduces bias.</p>
-<div id="b061085a" class="cell" data-execution_count="34">
+<div id="075c6476" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LassoCV, LinearRegression</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
@@ -1327,8 +1381,8 @@ TN
 <span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of LASSO: '</span>, mean_mse_lasso)</span>
 <span id="cb46-40"><a href="#cb46-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average MSE of OLS: '</span>, mean_mse_ols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Average MSE of LASSO:  462.04371469843966
-Average MSE of OLS:  492.2998349000015</code></pre>
+<pre><code>Average MSE of LASSO:  445.7394808331279
+Average MSE of OLS:  483.51659229493794</code></pre>
 </div>
 </div>
 </section>
@@ -1336,7 +1390,8 @@ Average MSE of OLS:  492.2998349000015</code></pre>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
 <ul>
-<li>(KOR) Seunghwan Oh(����ȯ), 2019, Python Machine Learning Pandas Data Analysis(���̽� �ӽŷ��� �Ǵٽ� �����ͺм�), ������ȭ��</li>
+<li>(KOR) Seunghwan Oh(?��?ȯ). (2019). Python Machine Learning Pandas Data Analysis(???̽? ?ӽŷ??? ?Ǵٽ? ?????ͺм?). ��????ȭ??</li>
+<li>James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). An introduction to statistical learning (1st ed.) [PDF]. Springer.</li>
 </ul>
 </section>
 
