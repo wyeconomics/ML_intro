@@ -2,6 +2,7 @@
 title: "Machine Learning with Python"
 author: "Wooyong Park"
 date: today
+jupyter: homebrew-py
 format:
   html:
     toc: true
@@ -9,7 +10,7 @@ format:
 ---
 
 
-## What is Machine Learning?
+# What is Machine Learning?
 
 Machine learning(ML) is the process of computer learning the data to discover the relation of multiple variables and make decisions based on them. These decisions could either be prediction, classification, or clustering. Specifically, prediction and classification are grouped into ***supervised learning***, and clustering is also named ***unsupervised learning***.
 
@@ -19,7 +20,7 @@ Machine learning(ML) is the process of computer learning the data to discover th
 | Characteristics    | - Correct answers are given to the computer<br>- Diverse ways to test/score models| - Answers not given to the computer<br> - Limited ways to test/score models|
 
 
-## Supervised Learning
+# Supervised Learning
 
 Supervised learning is classified as prediction or classification, according to whether the "target variable" is continuous or discrete. We aim to predict/classify the target variable's value based on the values of "predictor variables".
 
@@ -703,6 +704,8 @@ r_square = reg.score(X, y)
 ```
 
 
+
+
 ## Cross Validation and Hyperparameter Tuning
 Cross validating means dividing the sample into $k$ folds, and rotate the role of test data. In each of these splits and the corresponding test-fold, we obtain $k$ model performance metrics. Through cross validation, we can check whether these $k$ metrics are similar or having peculiarities, helping us generalize the model performance to unseen data.
 
@@ -842,6 +845,60 @@ knn_cv.fit(X_train, y_train)
 print(knn_cv.best_params_, knn_cv.best_score_)
 ```
 
+# Unsupervised Learning
+Unsupervised learning is the process of finding patterns in data without any labels(i.e., a dependent variable). It is commonly used for tasks like clustering (e.g., customer segmentation in marketing to group similar customers based on purchasing behavior), dimensionality reduction (e.g., using PCA to compress high-dimensional gene expression data in bioinformatics), and anomaly detection (e.g., identifying fraudulent transactions in financial systems). Unlike supervised learning, where models learn from input-output pairs, unsupervised learning relies on discovering hidden structures within the data itself, making it useful for exploratory data analysis and feature extraction in various domains.
+
+
+## Self Organizing Maps
+**Self organizing maps**, also called **Kohonen maps**, map the input data to a small (often rectangular) space. Similar individuals in the input space are projected into the same neuron in the output space. One can think of this as a one-layer neural network, whose output layer is the map itself.
+
+### Algorithm
+The algorithm of SOM is as follows:
+1. Set the size of the map and create a grid of neurons with randomly initialized weights. 
+  - In SOM, *weights are allocated to each neuron(node of the map), not the input variables. This is distinctive of SOM from supervised learning methods.* Also, the weights can be referred to as **codebooks** in SOMs.
+2. Randomly choose an observation from the training data and find the closest node(i.e., **best matching unit(BMU)**).
+3. Adjust the weight of the BMU node.
+4. Succesively, adjust the weights of the adjacent nodes.
+5. Adjust the learning rate and the neighborhood radius so that the next subsequent observation does not drastically affect the model.
+6. Repeat steps 2 to 5 for a set number of iterations or until convergence.
+
+### Weight Vectors
+In SOM, each node is allocated a weight vector. The vector has the same size to the input vectors(i.e., number of features). For example, if there are 10 features and we set the map into a 8 by 5 rectangular grid, we have 40 weight vectors with the size 8$\times$ 1.
+
+Then, consider the distance between an observation and a node $i$, defined as
+
+$$
+d_i = ||x-w_i|| = \sqrt{\sum_{j=1}^n(x_j - w_{ij})^2}
+$$
+
+where $n$ is the numbero of observation and $j$ denotes the $j$-th feature. Then, the BMU is defined as
+
+$$
+BMU = \arg\min_i (||\mathbf{x}-\mathbf{w}_i||)
+$$
+
+The key idea of SOM is to calibrate these weights so that each observation can be classified to the cluster with individuals with the most similar characteristics. The detail of this algorithm is delineated in [A.4.](/#sec-som_details).
+
+
+Let's begin building our first SOM with the `iris` dataset fro `scikit-learn` module.
+```{python}
+#| echo: true
+#| message: false
+#| warning: false
+from minisom import MiniSom
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.preprocessing import MinMaxScaler
+
+iris = datasets.load_iris()
+data = iris.data
+target = iris.target
+
+```
+
+### 
+
 ## Pipeline Operators
 TBU
 
@@ -918,7 +975,7 @@ where $m$ denotes the node.
 At a glance, you can see that both gini and entropy goes to zero when each $\overline{p}_{mk}$ goes close to either zero or one. Note that $\sum_{k=1}^K\overline{p}_{mk}=1$, and solving the "maximization" under linear constraints would demonstrate that $\overline{p}_{mk}=\frac{1}{K}$ mazimizes the impurity for both measures. These two measures are widely used in the context of ML, so it is good to know before we start making our trees and forests:)
 
 
-#### Some Remarks for Econ Students
+#### Some Remarks for Econ Students like myself
 Notice that in the gini index, since $\sum_{k=1}^K\overline{p}_{mk}=1$,
 
 $$
@@ -980,6 +1037,8 @@ print('Average MSE of OLS: ', mean_mse_ols)
 
 ```
 
+### A.4. Self Organizing Map{#sec-som_details}
+
 ## References
-- (KOR) Seunghwan Oh(?��?ȯ). (2019). Python Machine Learning Pandas Data Analysis(???̽? ?ӽŷ??? ?Ǵٽ? ?????ͺм?). ��????ȭ??
+- (KOR) Seunghwan Oh(?��?ȯ). (2019). Python Machine Learning Pandas Data Analysis(???̽? ?ӽŷ??? ?Ǵٽ? ?????ͺм?). ��????ȭ??
 - James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). An introduction to statistical learning (1st ed.) [PDF]. Springer.
